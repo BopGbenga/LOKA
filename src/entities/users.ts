@@ -1,6 +1,11 @@
-// src/entities/User.ts
-
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BeforeInsert,
+  BeforeUpdate,
+} from "typeorm";
+import bcrypt from "bcryptjs";
 
 @Entity("users")
 export class User {
@@ -16,11 +21,14 @@ export class User {
   @Column({ type: "varchar", length: 100 })
   username!: string;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 100, unique: true })
   email!: string;
 
   @Column({ type: "varchar", length: 255 })
   password!: string; // Store hashed password
+
+  @Column({ type: "boolean", default: false }) // Defaults to false
+  isVerified!: boolean;
 
   @Column({
     type: "enum", // Store as string
@@ -34,4 +42,24 @@ export class User {
 
   @Column({ type: "timestamp", nullable: true })
   updatedAt!: Date; // Updated timestamp
+
+  // Hash password before inserting a new user
+  @BeforeInsert()
+  async hashPassword(): Promise<void> {
+    if (this.password) {
+      // Check if password exists
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
+
+  // Update `updatedAt` timestamp before updating a user
+  @BeforeUpdate()
+  async updateTimestamp(): Promise<void> {
+    this.updatedAt = new Date();
+  }
+
+  // Compare provided password with stored hashed password
+  async isMatch(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+  }
 }
