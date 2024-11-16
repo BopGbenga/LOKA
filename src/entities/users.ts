@@ -25,9 +25,9 @@ export class User {
   email!: string;
 
   @Column({ type: "varchar", length: 255 })
-  password!: string; // Store hashed password
+  password!: string;
 
-  @Column({ type: "boolean", default: false }) // Defaults to false
+  @Column({ type: "boolean", default: false })
   isVerified!: boolean;
 
   @Column({
@@ -38,10 +38,10 @@ export class User {
   role!: string;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdAt!: Date; // Created timestamp
+  createdAt!: Date;
 
   @Column({ type: "timestamp", nullable: true })
-  updatedAt!: Date; // Updated timestamp
+  updatedAt!: Date;
 
   // Hash password before inserting a new user
   @BeforeInsert()

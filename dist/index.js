@@ -26,8 +26,6 @@ app.use((err, req, res, next) => {
 });
 ormConfig_1.AppDataSource.initialize()
     .then(() => {
-    console.log("Entities Loaded:", ormConfig_1.AppDataSource.options.entities);
-    // console.log("Entities Path:", entitiesPath);
     console.log("Database connected successfully");
 })
     .catch((error) => console.error("Error connecting to the database", error));

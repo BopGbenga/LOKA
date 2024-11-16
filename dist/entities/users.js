@@ -73,8 +73,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "boolean", default: false }) // Defaults to false
-    ,
+    (0, typeorm_1.Column)({ type: "boolean", default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([

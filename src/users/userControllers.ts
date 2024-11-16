@@ -53,16 +53,16 @@ export const createUser: RequestHandler = async (
       { expiresIn: "8h" }
     );
 
-    // Create verification link
+    // verification link
     const verificationLink = `${req.protocol}://${req.get(
       "host"
     )}/verify-email?token=${verificationToken}`;
 
     // Send verification email
     const mailOptions = {
-      from: process.env.EMAIL_USERNAME, // sender address
-      to: newUser.email, // user's email address
-      subject: "Verify Your Email", // Subject line
+      from: process.env.EMAIL_USERNAME,
+      to: newUser.email,
+      subject: "Verify Your Email",
       html: `<p>Hello ${newUser.username},</p>
                  <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
                  <a href="${verificationLink}">Verify Email</a>`, // HTML body
