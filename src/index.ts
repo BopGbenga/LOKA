@@ -3,17 +3,20 @@ import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./ormConfig";
 import bodyParser from "body-parser";
-import userRoute from "./users/userRoute";
+import userRouter from "../src/users/userRoute";
 dotenv.config();
+
 const app = express();
-
-const port = process.env.PORT || 3000;
-
+// app.use(bodyParser.json());
 app.use(express.json());
 
-app.use(bodyParser.json());
+const port = process.env.PORT || 4000;
 
-app.use("/users", userRoute);
+app.use("/users", userRouter);
+
+app.get("/test", (req: Request, res: Response) => {
+  res.status(200).send("Test route working");
+});
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   const err = new Error("Not Found");
@@ -32,6 +35,9 @@ app.use(
 );
 AppDataSource.initialize()
   .then(() => {
+    console.log("Entities Loaded:", AppDataSource.options.entities);
+    // console.log("Entities Path:", entitiesPath);
+
     console.log("Database connected successfully");
   })
   .catch((error) => console.error("Error connecting to the database", error));

@@ -10,7 +10,8 @@ import {
 
 const router = Router();
 
-router.post("s/ignup", validateUser, limiter, createUser);
-router.get("/login", validateLogin, limiter, loginUser);
+router.post("/signup", validateUser, limiter, createUser);
+router.post("/login", validateLogin, limiter, loginUser);
+router.get("/verify-email", verifyEmail);
 
 export default router;

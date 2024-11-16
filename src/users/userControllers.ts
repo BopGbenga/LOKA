@@ -6,8 +6,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { CreateUserDTO, LoginUserDTO } from "../interfaces/user.DTO";
 import { AppDataSource } from "../ormConfig";
 import nodemailer from "nodemailer";
-import { any } from "joi";
-import { compare } from "bcryptjs";
+import { compare } from "bcrypt";
 
 require("dotenv").config();
 
@@ -64,7 +63,7 @@ export const createUser: RequestHandler = async (
       from: process.env.EMAIL_USERNAME, // sender address
       to: newUser.email, // user's email address
       subject: "Verify Your Email", // Subject line
-      html: `<p>Hello ${newUser.firstname},</p>
+      html: `<p>Hello ${newUser.username},</p>
                  <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
                  <a href="${verificationLink}">Verify Email</a>`, // HTML body
     };
@@ -87,14 +86,17 @@ export const createUser: RequestHandler = async (
 };
 
 //verfify email
-export const verifyEmail = async (req: Request, res: Response) => {
+export const verifyEmail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    // Extract the token from the query parameters
-    const token = req.query.token as string;
+    const { token } = req.query;
 
-    // Check if the token exists
-    if (!token) {
-      return res.status(400).json({ message: "Token is required" });
+    // Check if token exists
+    if (typeof token !== "string") {
+      res.status(400).json({ message: "Token is required" });
+      return;
     }
 
     // Verify the token
@@ -103,33 +105,26 @@ export const verifyEmail = async (req: Request, res: Response) => {
       process.env.JWT_SECRET as string
     ) as JwtPayload;
 
-    // Check if the decoded token contains the required fields (id and email)
-    if (!decoded || !decoded.id || !decoded.email) {
-      return res.status(400).json({ message: "Invalid token" });
-    }
-
-    // Get the user repository and find the user by the decoded id
+    // Get the user repository from TypeORM and find the user by ID
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: decoded.id } });
 
     // If the user doesn't exist, return an error
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
     // If the user exists, mark them as verified
     user.isVerified = true;
     await userRepository.save(user);
 
-    // Send success response
-    return res.status(200).json({ message: "Email verified successfully" });
+    res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
-    // If an error occurs (e.g., token verification failed)
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(400).json({ message: "Invalid or expired token" });
   }
 };
-
 //user login
 export const loginUser: RequestHandler = async (
   req: Request,
@@ -141,7 +136,7 @@ export const loginUser: RequestHandler = async (
     const user = await userRepository.findOne({ where: { email } });
     if (!user) {
       res.status(409).json({
-        message: "user nof found",
+        message: "user not found",
         success: false,
       });
       return;
@@ -158,7 +153,7 @@ export const loginUser: RequestHandler = async (
     const validPassword = await compare(password, user.password);
     if (!validPassword) {
       res.status(401).json({
-        message: "invalid password",
+        message: "Email or passsword incorrect",
       });
       return;
     }

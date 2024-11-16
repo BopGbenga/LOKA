@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon"
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
+    "serve": "nodemon dist/app.js"
   },
   "author": "Gbenga",
   "license": "ISC",
@@ -20,6 +21,8 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "@types/nodemailer": "^6.4.16",
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   },
