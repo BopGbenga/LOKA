@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./ormConfig";
 import bodyParser from "body-parser";
-import userRouter from "../src/users/userRoute";
+import userRouter from "./routes/userRoute";
 dotenv.config();
 
 const app = express();

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const ormConfig_1 = require("./ormConfig");
-const userRoute_1 = __importDefault(require("../src/users/userRoute"));
+const userRoute_1 = __importDefault(require("./routes/userRoute"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // app.use(bodyParser.json());

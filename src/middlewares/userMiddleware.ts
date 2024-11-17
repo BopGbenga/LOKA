@@ -7,7 +7,7 @@ export const validateUser = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const schema = Joi.object({
+  const schema = Joi.object<CreateUserDTO>({
     firstname: Joi.string().required().messages({
       "string.empty": "Firstname cannot be empty",
       "any.required": "Firstname is required",
