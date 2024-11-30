@@ -4,15 +4,24 @@ import dotenv from "dotenv";
 import { AppDataSource } from "./ormConfig";
 import bodyParser from "body-parser";
 import userRouter from "./routes/userRoute";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 // app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
+
+app.use(cors());
 
 const port = process.env.PORT || 4000;
 
 app.use("/users", userRouter);
+
+app.get("/api/data", (req: Request, res: Response) => {
+  res.json({ message: "CORS is working with TypeScript!" });
+});
 
 app.get("/test", (req: Request, res: Response) => {
   res.status(200).send("Test route working");

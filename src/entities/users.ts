@@ -30,6 +30,11 @@ export class User {
   @Column({ type: "boolean", default: false })
   isVerified!: boolean;
 
+  @Column({ type: "varchar", nullable: true }) // Allow null values in the database
+  resetToken!: string | null;
+
+  @Column({ type: "timestamp", nullable: true }) // Allows null values
+  tokenExpiry!: Date | null;
   @Column({
     type: "enum", // Store as string
     enum: ["artisan", "consumer"],

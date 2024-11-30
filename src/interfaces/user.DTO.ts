@@ -4,6 +4,7 @@ export interface CreateUserDTO {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
   isVerified: boolean;
   role: string;
 }

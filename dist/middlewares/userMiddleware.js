@@ -39,6 +39,14 @@ const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             "any.required": "Password is required",
             "string.empty": "Password cannot be empty",
         }),
+        confirmPassword: joi_1.default.string()
+            .valid(joi_1.default.ref("password"))
+            .required()
+            .messages({
+            "any.only": "Passwords do not match",
+            "any.required": "Confirm password is required",
+            "string.empty": "Confirm password cannot be empty",
+        }),
     });
     try {
         yield schema.validateAsync(req.body, { abortEarly: false });

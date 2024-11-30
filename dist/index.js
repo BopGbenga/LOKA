@@ -7,12 +7,19 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const ormConfig_1 = require("./ormConfig");
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // app.use(bodyParser.json());
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
+app.use((0, cors_1.default)());
 const port = process.env.PORT || 4000;
 app.use("/users", userRoute_1.default);
+app.get("/api/data", (req, res) => {
+    res.json({ message: "CORS is working with TypeScript!" });
+});
 app.get("/test", (req, res) => {
     res.status(200).send("Test route working");
 });

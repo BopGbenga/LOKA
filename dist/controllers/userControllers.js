@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUsers = exports.loginUser = exports.verifyEmail = exports.createUser = void 0;
+exports.updateUsers = exports.resetPasswordController = exports.requestPasswordReset = exports.loginUser = exports.verifyEmail = exports.createUser = void 0;
 const users_1 = require("../entities/users");
 // import * as jwt from "jsonwebtoken";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const ormConfig_1 = require("../ormConfig");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcrypt_1 = require("bcrypt");
+const authservices_1 = require("../services/authservices");
 require("dotenv").config();
 const transporter = nodemailer_1.default.createTransport({
     service: "gmail",
@@ -36,7 +37,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const existingUser = yield userRepository.findOne({ where: { email } });
         if (existingUser) {
             res.status(400).json({
-                message: "User with emai already exist",
+                message: "User with email already exist",
             });
             return;
         }
@@ -61,7 +62,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             subject: "Verify Your Email",
             html: `<p>Hello ${newUser.username},</p>
                  <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
-                 <a href="${verificationLink}">Verify Email</a>`, // HTML body
+                 <a href="${verificationLink}">Verify Email</a>`,
         };
         try {
             yield transporter.sendMail(mailOptions);
@@ -157,6 +158,36 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return;
 });
 exports.loginUser = loginUser;
+//reset  user password
+const requestPasswordReset = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    try {
+        yield (0, authservices_1.sendPasswordResetEmail)(email, req, res);
+        res
+            .status(200)
+            .json({ message: "Password reset link sent to your email." });
+        return;
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message });
+        return;
+    }
+});
+exports.requestPasswordReset = requestPasswordReset;
+const resetPasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Request body:", req.body);
+    const { token, newPassword } = req.body;
+    console.log("Token:", token);
+    console.log("New Password:", newPassword);
+    try {
+        yield (0, authservices_1.resetPassword)(req, res, next);
+    }
+    catch (error) {
+        const errorMessage = (error === null || error === void 0 ? void 0 : error.message) || "An error occurred during password reset.";
+        res.status(400).json({ error: errorMessage });
+    }
+});
+exports.resetPasswordController = resetPasswordController;
 //update user profile
 const updateUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

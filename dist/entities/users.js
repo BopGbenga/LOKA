@@ -77,6 +77,16 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: "varchar", nullable: true }) // Allow null values in the database
+    ,
+    __metadata("design:type", Object)
+], User.prototype, "resetToken", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "timestamp", nullable: true }) // Allows null values
+    ,
+    __metadata("design:type", Object)
+], User.prototype, "tokenExpiry", void 0);
+__decorate([
     (0, typeorm_1.Column)({
         type: "enum", // Store as string
         enum: ["artisan", "consumer"],

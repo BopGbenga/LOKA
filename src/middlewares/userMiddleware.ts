@@ -31,6 +31,14 @@ export const validateUser = async (
       "any.required": "Password is required",
       "string.empty": "Password cannot be empty",
     }),
+    confirmPassword: Joi.string()
+      .valid(Joi.ref("password"))
+      .required()
+      .messages({
+        "any.only": "Passwords do not match",
+        "any.required": "Confirm password is required",
+        "string.empty": "Confirm password cannot be empty",
+      }),
   });
 
   try {

@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from "express";
+import { Request, Response, RequestHandler, NextFunction } from "express";
 import { User } from "../entities/users";
 
 // import * as jwt from "jsonwebtoken";
@@ -7,6 +7,10 @@ import { CreateUserDTO, LoginUserDTO } from "../interfaces/user.DTO";
 import { AppDataSource } from "../ormConfig";
 import nodemailer from "nodemailer";
 import { compare } from "bcrypt";
+import {
+  sendPasswordResetEmail,
+  resetPassword,
+} from "../services/authservices";
 
 require("dotenv").config();
 
@@ -31,7 +35,7 @@ export const createUser: RequestHandler = async (
     const existingUser = await userRepository.findOne({ where: { email } });
     if (existingUser) {
       res.status(400).json({
-        message: "User with emai already exist",
+        message: "User with email already exist",
       });
       return;
     }
@@ -65,7 +69,7 @@ export const createUser: RequestHandler = async (
       subject: "Verify Your Email",
       html: `<p>Hello ${newUser.username},</p>
                  <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
-                 <a href="${verificationLink}">Verify Email</a>`, // HTML body
+                 <a href="${verificationLink}">Verify Email</a>`,
     };
     try {
       await transporter.sendMail(mailOptions);
@@ -176,6 +180,42 @@ export const loginUser: RequestHandler = async (
     res.status(500).json({ message: "Internal server error" });
   }
   return;
+};
+
+//reset  user password
+export const requestPasswordReset = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { email } = req.body;
+  try {
+    await sendPasswordResetEmail(email, req, res);
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
+    return;
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+    return;
+  }
+};
+export const resetPasswordController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  console.log("Request body:", req.body);
+  const { token, newPassword } = req.body;
+  console.log("Token:", token);
+  console.log("New Password:", newPassword);
+
+  try {
+    await resetPassword(req, res, next);
+  } catch (error: any) {
+    const errorMessage =
+      error?.message || "An error occurred during password reset.";
+    res.status(400).json({ error: errorMessage });
+  }
 };
 
 //update user profile
