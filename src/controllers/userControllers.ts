@@ -154,7 +154,7 @@ export const loginUser: RequestHandler = async (
       });
     }
 
-    const validPassword = await compare(password, user.password);
+    const validPassword = await compare(password, user.password as string);
     if (!validPassword) {
       res.status(401).json({
         message: "Email or passsword incorrect",

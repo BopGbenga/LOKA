@@ -5,6 +5,9 @@ import { AppDataSource } from "./ormConfig";
 import bodyParser from "body-parser";
 import userRouter from "./routes/userRoute";
 import cors from "cors";
+import session from "express-session";
+import passport from "passport";
+import oauthRoutes from "./services/outhRouter";
 dotenv.config();
 
 const app = express();
@@ -16,7 +19,17 @@ app.set("trust proxy", 1);
 app.use(cors());
 
 const port = process.env.PORT || 4000;
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
+app.use(oauthRoutes);
 app.use("/users", userRouter);
 
 app.get("/api/data", (req: Request, res: Response) => {

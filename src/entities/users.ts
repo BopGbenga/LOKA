@@ -24,23 +24,27 @@ export class User {
   @Column({ type: "varchar", length: 100, unique: true })
   email!: string;
 
-  @Column({ type: "varchar", length: 255 })
-  password!: string;
+  @Column({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
+  password!: string | null;
 
   @Column({ type: "boolean", default: false })
   isVerified!: boolean;
 
-  @Column({ type: "varchar", nullable: true }) // Allow null values in the database
+  @Column({ type: "varchar", nullable: true })
   resetToken!: string | null;
 
-  @Column({ type: "timestamp", nullable: true }) // Allows null values
+  @Column({ type: "timestamp", nullable: true })
   tokenExpiry!: Date | null;
+
   @Column({
-    type: "enum", // Store as string
+    type: "enum",
     enum: ["artisan", "consumer"],
     default: "consumer",
   })
   role!: string;
+
+  @Column({ type: "varchar", nullable: true, unique: true }) // Store Google ID
+  googleId!: string | null;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt!: Date;
@@ -48,23 +52,21 @@ export class User {
   @Column({ type: "timestamp", nullable: true })
   updatedAt!: Date;
 
-  // Hash password before inserting a new user
   @BeforeInsert()
   async hashPassword(): Promise<void> {
     if (this.password) {
-      // Check if password exists
+      // Skip hashing for Google users
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
 
-  // Update `updatedAt` timestamp before updating a user
   @BeforeUpdate()
   async updateTimestamp(): Promise<void> {
     this.updatedAt = new Date();
   }
 
-  // Compare provided password with stored hashed password
   async isMatch(password: string): Promise<boolean> {
+    if (!this.password) return false; // No password for Google users
     return await bcrypt.compare(password, this.password);
   }
 }

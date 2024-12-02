@@ -25,24 +25,23 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 let User = class User {
-    // Hash password before inserting a new user
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.password) {
-                // Check if password exists
+                // Skip hashing for Google users
                 this.password = yield bcrypt_1.default.hash(this.password, 10);
             }
         });
     }
-    // Update `updatedAt` timestamp before updating a user
     updateTimestamp() {
         return __awaiter(this, void 0, void 0, function* () {
             this.updatedAt = new Date();
         });
     }
-    // Compare provided password with stored hashed password
     isMatch(password) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!this.password)
+                return false; // No password for Google users
             return yield bcrypt_1.default.compare(password, this.password);
         });
     }
@@ -69,31 +68,35 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
-    __metadata("design:type", String)
+    (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
+    ,
+    __metadata("design:type", Object)
 ], User.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "boolean", default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", nullable: true }) // Allow null values in the database
-    ,
+    (0, typeorm_1.Column)({ type: "varchar", nullable: true }),
     __metadata("design:type", Object)
 ], User.prototype, "resetToken", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "timestamp", nullable: true }) // Allows null values
-    ,
+    (0, typeorm_1.Column)({ type: "timestamp", nullable: true }),
     __metadata("design:type", Object)
 ], User.prototype, "tokenExpiry", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        type: "enum", // Store as string
+        type: "enum",
         enum: ["artisan", "consumer"],
         default: "consumer",
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }) // Store Google ID
+    ,
+    __metadata("design:type", Object)
+], User.prototype, "googleId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" }),
     __metadata("design:type", Date)
