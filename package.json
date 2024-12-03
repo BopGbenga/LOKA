@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
-    "serve": "nodemon dist/app.js"
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "serve": "nodemon dist/index.js"
   },
   "author": "Gbenga",
   "license": "ISC",
