@@ -13,6 +13,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
 
   entities: [path.join(__dirname, "/entities/*.js")], // Ensure this points to the right directory
-  synchronize: true, // Set to false in production
+  synchronize: false, // Set to false in production
   logging: false,
 });
