@@ -21,7 +21,7 @@
     "@types/express-rate-limit": "^6.0.2",
     "@types/express-session": "^1.18.1",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.1",
     "@types/nodemailer": "^6.4.16",
     "@types/oauth": "^0.9.6",
     "@types/passport": "^1.0.17",

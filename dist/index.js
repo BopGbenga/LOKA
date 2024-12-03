@@ -11,8 +11,6 @@ const cors_1 = __importDefault(require("cors"));
 const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
 const outhRouter_1 = __importDefault(require("./services/outhRouter"));
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // app.use(bodyParser.json());
@@ -20,7 +18,6 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 app.use((0, cors_1.default)());
-console.log("Entities in dist:", fs_1.default.readdirSync(path_1.default.join(__dirname, "dist/entities")));
 const port = process.env.PORT || 4000;
 app.use((0, express_session_1.default)({
     secret: "secret",

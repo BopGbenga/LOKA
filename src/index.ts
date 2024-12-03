@@ -8,8 +8,7 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import oauthRoutes from "./services/outhRouter";
-import fs from "fs";
-import path from "path";
+
 dotenv.config();
 
 const app = express();
@@ -19,10 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 
 app.use(cors());
-console.log(
-  "Entities in dist:",
-  fs.readdirSync(path.join(__dirname, "dist/entities"))
-);
 
 const port = process.env.PORT || 4000;
 app.use(
