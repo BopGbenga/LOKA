@@ -32,7 +32,10 @@ export const createUser: RequestHandler = async (
     const userRepository = AppDataSource.getRepository(User);
 
     //check for existing user
+    console.log("Checking user for email:", email);
     const existingUser = await userRepository.findOne({ where: { email } });
+    console.log("Found user:", existingUser);
+
     if (existingUser) {
       res.status(400).json({
         message: "User with email already exist",

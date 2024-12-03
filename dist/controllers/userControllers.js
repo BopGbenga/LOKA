@@ -34,7 +34,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { firstname, lastname, username, email, password, role } = req.body;
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         //check for existing user
+        console.log("Checking user for email:", email);
         const existingUser = yield userRepository.findOne({ where: { email } });
+        console.log("Found user:", existingUser);
         if (existingUser) {
             res.status(400).json({
                 message: "User with email already exist",
