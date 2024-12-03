@@ -20,7 +20,17 @@ const users_1 = require("../entities/users");
 const router = express_1.default.Router();
 // Setup Passport for Google OAuth
 (0, Oauth_1.setupPassport)();
-// Route to initiate login
+// Route to initiate Google OAuth login
+router.get("/auth/google", (req, res) => {
+    const authUrl = passport_1.default.authenticate("google", {
+        scope: [
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email",
+        ],
+    });
+    res.redirect(authUrl); // This redirects to Google's OAuth consent screen
+});
+// Google OAuth callback route
 router.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { googleId, name, email } = req.user;
@@ -45,7 +55,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             emailUser.googleId = googleId;
             emailUser.firstname = firstname;
             emailUser.lastname = lastname;
-            // emailUser.username = `${firstname.toLowerCase()}.${lastname.toLowerCase()}`;
             emailUser.username = lastname;
             emailUser.isVerified = true;
             yield userRepository.save(emailUser);
@@ -67,7 +76,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             user.lastname = lastname;
             user.email = email;
             user.isVerified = true;
-            // user.username = `${firstname.toLowerCase()}.${lastname.toLowerCase()}`;
             user.username = lastname;
             user.role = "consumer"; // Default role
             yield userRepository.save(user);

@@ -9,7 +9,18 @@ const router = express.Router();
 // Setup Passport for Google OAuth
 setupPassport();
 
-// Route to initiate login
+// Route to initiate Google OAuth login
+router.get("/auth/google", (req, res) => {
+  const authUrl = passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  });
+  res.redirect(authUrl); // This redirects to Google's OAuth consent screen
+});
+
+// Google OAuth callback route
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
@@ -43,7 +54,6 @@ router.get(
         emailUser.googleId = googleId;
         emailUser.firstname = firstname;
         emailUser.lastname = lastname;
-        // emailUser.username = `${firstname.toLowerCase()}.${lastname.toLowerCase()}`;
         emailUser.username = lastname;
         emailUser.isVerified = true;
 
@@ -66,7 +76,6 @@ router.get(
         user.lastname = lastname;
         user.email = email;
         user.isVerified = true;
-        // user.username = `${firstname.toLowerCase()}.${lastname.toLowerCase()}`;
         user.username = lastname;
         user.role = "consumer"; // Default role
 
