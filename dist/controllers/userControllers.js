@@ -33,13 +33,21 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { firstname, lastname, username, email, password, role } = req.body;
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
-        //check for existing user
+        // Check for an existing user by email
         console.log("Checking user for email:", email);
         const existingUser = yield userRepository.findOne({ where: { email } });
         console.log("Found user:", existingUser);
+        // If the user exists and is registered through Google OAuth, notify the user
+        if (existingUser && existingUser.googleId) {
+            res.status(400).json({
+                message: "This email is already registered through Google OAuth.",
+            });
+            return;
+        }
+        // If a user with the same email exists (either normal or Google), reject the creation
         if (existingUser) {
             res.status(400).json({
-                message: "User with email already exist",
+                message: "User with this email already exists",
             });
             return;
         }

@@ -31,14 +31,24 @@ export const createUser: RequestHandler = async (
       req.body as CreateUserDTO;
     const userRepository = AppDataSource.getRepository(User);
 
-    //check for existing user
+    // Check for an existing user by email
     console.log("Checking user for email:", email);
     const existingUser = await userRepository.findOne({ where: { email } });
+
     console.log("Found user:", existingUser);
 
+    // If the user exists and is registered through Google OAuth, notify the user
+    if (existingUser && existingUser.googleId) {
+      res.status(400).json({
+        message: "This email is already registered through Google OAuth.",
+      });
+      return;
+    }
+
+    // If a user with the same email exists (either normal or Google), reject the creation
     if (existingUser) {
       res.status(400).json({
-        message: "User with email already exist",
+        message: "User with this email already exists",
       });
       return;
     }

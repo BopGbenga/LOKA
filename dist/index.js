@@ -23,6 +23,7 @@ app.use((0, express_session_1.default)({
     secret: "secret",
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === "production" },
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
