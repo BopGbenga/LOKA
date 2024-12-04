@@ -14,5 +14,5 @@ export const AppDataSource = new DataSource({
 
   entities: [path.join(__dirname, "/entities/*.js")], // Ensure this points to the right directory
   synchronize: false, // Set to false in production
-  logging: false,
+  logging: true,
 });
