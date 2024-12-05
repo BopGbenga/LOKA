@@ -15,7 +15,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: [path_1.default.join(__dirname, "/entities/*.ts")], // Ensure this points to the right directory
+    entities: [path_1.default.join(__dirname, "/entities/*.js")], // Ensure this points to the right directory
     synchronize: false, // Set to false in production
     logging: false,
 });
