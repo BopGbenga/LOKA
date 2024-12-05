@@ -23,6 +23,8 @@ router.get("/", (req, res) => {
     </html>
   `);
 });
+// Route to start Google authentication
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 // Route to initiate login
 router.get(

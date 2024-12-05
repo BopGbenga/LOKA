@@ -34,6 +34,8 @@ router.get("/", (req, res) => {
     </html>
   `);
 });
+// Route to start Google authentication
+router.get("/auth/google", passport_1.default.authenticate("google", { scope: ["profile", "email"] }));
 // Route to initiate login
 router.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
