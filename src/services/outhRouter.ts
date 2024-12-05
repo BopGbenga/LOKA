@@ -25,16 +25,16 @@ router.get(
         return;
       }
 
-      const nameParts = name.split(" ");
-      const firstname = nameParts[0];
-      const lastname = nameParts.slice(1).join(" ");
-
       const userRepository = AppDataSource.getRepository(User);
 
+      // Check if a user with this email already exists
       let emailUser = await userRepository.findOne({ where: { email } });
+      console.log("Email found in database:", emailUser); // Debug line
+
       if (emailUser) {
         if (emailUser.googleId) {
-          // If user already linked their account with Google, log them in
+          // Existing user with Google linked, proceed to login
+          console.log("User already linked with Google:", emailUser);
           req.login(emailUser, (err) => {
             if (err) {
               console.error("Login Error:", err);
@@ -45,13 +45,19 @@ router.get(
           });
         } else {
           // User exists but hasn't linked Google, prevent duplicate creation
+          console.log("Existing user, but Google not linked:", emailUser);
           res
             .status(400)
             .send("User already exists with this email. Please log in.");
           return;
         }
       } else {
-        // Create a new user as no matching email found
+        // No existing user found, create a new one
+        console.log("Creating new user with Google info");
+        const nameParts = name.split(" ");
+        const firstname = nameParts[0];
+        const lastname = nameParts.slice(1).join(" ");
+
         const user = new User();
         user.googleId = googleId;
         user.firstname = firstname;
@@ -62,8 +68,7 @@ router.get(
         user.role = "consumer"; // Default role
 
         await userRepository.save(user);
-
-        await userRepository.save(user);
+        console.log("New user created:", user);
 
         req.login(user, (err) => {
           if (err) {
