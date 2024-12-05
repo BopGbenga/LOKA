@@ -32,26 +32,26 @@ router.get(
       const userRepository = AppDataSource.getRepository(User);
 
       let emailUser = await userRepository.findOne({ where: { email } });
-
       if (emailUser) {
-        // If user exists, update their Google information
-        emailUser.googleId = googleId;
-        emailUser.firstname = firstname;
-        emailUser.lastname = lastname;
-        emailUser.username = lastname;
-        emailUser.isVerified = true;
-
-        await userRepository.save(emailUser);
-
-        req.login(emailUser, (err) => {
-          if (err) {
-            console.error("Login Error:", err);
-            res.status(500).send("Failed to log in");
-            return;
-          }
-          return res.redirect("/profile");
-        });
+        if (emailUser.googleId) {
+          // If user already linked their account with Google, log them in
+          req.login(emailUser, (err) => {
+            if (err) {
+              console.error("Login Error:", err);
+              res.status(500).send("Failed to log in");
+              return;
+            }
+            return res.redirect("/profile");
+          });
+        } else {
+          // User exists but hasn't linked Google, prevent duplicate creation
+          res
+            .status(400)
+            .send("User already exists with this email. Please log in.");
+          return;
+        }
       } else {
+        // Create a new user as no matching email found
         const user = new User();
         user.googleId = googleId;
         user.firstname = firstname;
@@ -60,6 +60,8 @@ router.get(
         user.isVerified = true;
         user.username = lastname;
         user.role = "consumer"; // Default role
+
+        await userRepository.save(user);
 
         await userRepository.save(user);
 

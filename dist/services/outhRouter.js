@@ -37,23 +37,27 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         let emailUser = yield userRepository.findOne({ where: { email } });
         if (emailUser) {
-            // If user exists, update their Google information
-            emailUser.googleId = googleId;
-            emailUser.firstname = firstname;
-            emailUser.lastname = lastname;
-            emailUser.username = lastname;
-            emailUser.isVerified = true;
-            yield userRepository.save(emailUser);
-            req.login(emailUser, (err) => {
-                if (err) {
-                    console.error("Login Error:", err);
-                    res.status(500).send("Failed to log in");
-                    return;
-                }
-                return res.redirect("/profile");
-            });
+            if (emailUser.googleId) {
+                // If user already linked their account with Google, log them in
+                req.login(emailUser, (err) => {
+                    if (err) {
+                        console.error("Login Error:", err);
+                        res.status(500).send("Failed to log in");
+                        return;
+                    }
+                    return res.redirect("/profile");
+                });
+            }
+            else {
+                // User exists but hasn't linked Google, prevent duplicate creation
+                res
+                    .status(400)
+                    .send("User already exists with this email. Please log in.");
+                return;
+            }
         }
         else {
+            // Create a new user as no matching email found
             const user = new users_1.User();
             user.googleId = googleId;
             user.firstname = firstname;
@@ -62,6 +66,7 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             user.isVerified = true;
             user.username = lastname;
             user.role = "consumer"; // Default role
+            yield userRepository.save(user);
             yield userRepository.save(user);
             req.login(user, (err) => {
                 if (err) {

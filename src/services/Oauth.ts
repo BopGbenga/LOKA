@@ -17,15 +17,6 @@ interface Email {
   value: string;
   verified: boolean;
 }
-// app.use(
-//   session({
-//     secret: "secret",
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 export function setupPassport() {
   passport.use(
