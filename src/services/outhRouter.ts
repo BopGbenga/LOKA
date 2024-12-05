@@ -9,6 +9,21 @@ const router = express.Router();
 // Setup Passport for Google OAuth
 setupPassport();
 
+router.get("/", (req, res) => {
+  res.send(`
+    <html>
+      <body>
+        <h1>Welcome to My App</h1>
+        <a href="/auth/google">
+          <button style="padding: 10px; background-color: blue; color: white; border: none; border-radius: 5px;">
+            Login with Google
+          </button>
+        </a>
+      </body>
+    </html>
+  `);
+});
+
 // Route to initiate login
 router.get(
   "/auth/google/callback",
