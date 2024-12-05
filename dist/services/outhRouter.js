@@ -37,23 +37,19 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
         console.log("Email found in database:", emailUser); // Debug line
         if (emailUser) {
             if (emailUser.googleId) {
-                // Existing user with Google linked, proceed to login
+                // User already linked with Google
                 console.log("User already linked with Google:", emailUser);
-                req.login(emailUser, (err) => {
-                    if (err) {
-                        console.error("Login Error:", err);
-                        res.status(500).send("Failed to log in");
-                        return;
-                    }
-                    return res.redirect("/profile");
-                });
+                res
+                    .status(200)
+                    .send("Welcome back! You are already registered with Google.");
+                return;
             }
             else {
-                // User exists but hasn't linked Google, prevent duplicate creation
+                // User exists but not linked with Google
                 console.log("Existing user, but Google not linked:", emailUser);
                 res
                     .status(400)
-                    .send("User already exists with this email. Please log in.");
+                    .send("User already exists with this email. Please log in manually.");
                 return;
             }
         }
