@@ -31,24 +31,17 @@ export const createUser: RequestHandler = async (
       req.body as CreateUserDTO;
     const userRepository = AppDataSource.getRepository(User);
 
-    // Check for an existing user by email
-    console.log("Checking user for email:", email);
+    //check for existing user
     const existingUser = await userRepository.findOne({ where: { email } });
-
-    console.log("Found user:", existingUser);
-
-    // If the user exists and is registered through Google OAuth, notify the user
-    if (existingUser && existingUser.googleId) {
+    if (existingUser?.googleId) {
       res.status(400).json({
         message: "This email is already registered through Google OAuth.",
       });
       return;
     }
-
-    // If a user with the same email exists (either normal or Google), reject the creation
     if (existingUser) {
       res.status(400).json({
-        message: "User with this email already exists",
+        message: "User with email already exist",
       });
       return;
     }
@@ -79,9 +72,9 @@ export const createUser: RequestHandler = async (
     const mailOptions = {
       from: process.env.EMAIL_USERNAME,
       to: newUser.email,
-      subject: "Verify Your Email",
+      subject: "Verify Email Address for Loka",
       html: `<p>Hello ${newUser.username},</p>
-                 <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
+                 <p>Use the following link to confirm your email addres:</p>
                  <a href="${verificationLink}">Verify Email</a>`,
     };
     try {
@@ -203,9 +196,6 @@ export const requestPasswordReset = async (
   const { email } = req.body;
   try {
     await sendPasswordResetEmail(email, req, res);
-    res
-      .status(200)
-      .json({ message: "Password reset link sent to your email." });
     return;
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -217,11 +207,6 @@ export const resetPasswordController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log("Request body:", req.body);
-  const { token, newPassword } = req.body;
-  console.log("Token:", token);
-  console.log("New Password:", newPassword);
-
   try {
     await resetPassword(req, res, next);
   } catch (error: any) {
@@ -249,7 +234,7 @@ export const updateUsers: RequestHandler = async (
     const { firstname, lastname, username, email } = req.body as CreateUserDTO;
     if (firstname) user.firstname = firstname;
     if (lastname) user.lastname = lastname;
-    // if (username) user.lastname = username;
+    if (username) user.username = username;
     // if (email) user.email = email;
 
     await userRepository.save(user);

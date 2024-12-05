@@ -1,5 +1,5 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
-export const generateResetToken = (): string => {
-  return crypto.randomBytes(32).toString("hex");
+export const generateResetCode = (): string => {
+  return crypto.randomInt(100000, 1000000).toString();
 };

@@ -9,18 +9,7 @@ const router = express.Router();
 // Setup Passport for Google OAuth
 setupPassport();
 
-// Route to initiate Google OAuth login
-router.get("/auth/google", (req, res) => {
-  const authUrl = passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email",
-    ],
-  });
-  res.redirect(authUrl); // This redirects to Google's OAuth consent screen
-});
-
-// Google OAuth callback route
+// Route to initiate login
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
@@ -36,14 +25,9 @@ router.get(
         return;
       }
 
-      // Correctly split the name to get firstname and lastname
       const nameParts = name.split(" ");
-      const firstname = nameParts[0]; // The first part is the firstname
-      const lastname = nameParts.slice(1).join(" "); // All other parts make up the lastname
-
-      console.log("Extracted firstname:", firstname); // Log the extracted first name
-      console.log("Extracted lastname:", lastname); // Log the extracted last name
-      console.log("Extracted email:", email);
+      const firstname = nameParts[0];
+      const lastname = nameParts.slice(1).join(" ");
 
       const userRepository = AppDataSource.getRepository(User);
 
@@ -59,7 +43,6 @@ router.get(
 
         await userRepository.save(emailUser);
 
-        // Ensure req.user is set correctly
         req.login(emailUser, (err) => {
           if (err) {
             console.error("Login Error:", err);
@@ -69,7 +52,6 @@ router.get(
           return res.redirect("/profile");
         });
       } else {
-        // If user doesn't exist, create a new one
         const user = new User();
         user.googleId = googleId;
         user.firstname = firstname;
@@ -81,7 +63,6 @@ router.get(
 
         await userRepository.save(user);
 
-        // Ensure req.user is set correctly
         req.login(user, (err) => {
           if (err) {
             console.error("Login Error:", err);
@@ -102,7 +83,6 @@ router.get(
 router.get("/profile", (req, res) => {
   if (req.isAuthenticated()) {
     const user = req.user as User;
-    console.log(user); // Log the user object to check what is stored
     res.send(`Welcome, ${user.firstname} ${user.lastname}`);
   } else {
     res.redirect("/auth/google");

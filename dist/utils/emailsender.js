@@ -16,18 +16,24 @@ exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 require("dotenv").config();
 const sendEmail = (to, subject, text) => __awaiter(void 0, void 0, void 0, function* () {
-    const transporter = nodemailer_1.default.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
-    yield transporter.sendMail({
-        from: process.env.EMAIL_USERNAME,
-        to,
-        subject,
-        text,
-    });
+    try {
+        const transporter = nodemailer_1.default.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+        yield transporter.sendMail({
+            from: process.env.EMAIL_USERNAME,
+            to,
+            subject: "Password Reset Code",
+            text,
+        });
+        console.log(`Email sent successfully to ${to}`);
+    }
+    catch (error) {
+        console.error("Error sending email:", error);
+    }
 });
 exports.sendEmail = sendEmail;

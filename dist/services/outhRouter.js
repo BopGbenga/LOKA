@@ -20,17 +20,7 @@ const users_1 = require("../entities/users");
 const router = express_1.default.Router();
 // Setup Passport for Google OAuth
 (0, Oauth_1.setupPassport)();
-// Route to initiate Google OAuth login
-router.get("/auth/google", (req, res) => {
-    const authUrl = passport_1.default.authenticate("google", {
-        scope: [
-            "https://www.googleapis.com/auth/userinfo.profile",
-            "https://www.googleapis.com/auth/userinfo.email",
-        ],
-    });
-    res.redirect(authUrl); // This redirects to Google's OAuth consent screen
-});
-// Google OAuth callback route
+// Route to initiate login
 router.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { googleId, name, email } = req.user;
@@ -41,13 +31,9 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
                 .send("Name or email not found in the Google OAuth response.");
             return;
         }
-        // Correctly split the name to get firstname and lastname
         const nameParts = name.split(" ");
-        const firstname = nameParts[0]; // The first part is the firstname
-        const lastname = nameParts.slice(1).join(" "); // All other parts make up the lastname
-        console.log("Extracted firstname:", firstname); // Log the extracted first name
-        console.log("Extracted lastname:", lastname); // Log the extracted last name
-        console.log("Extracted email:", email);
+        const firstname = nameParts[0];
+        const lastname = nameParts.slice(1).join(" ");
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         let emailUser = yield userRepository.findOne({ where: { email } });
         if (emailUser) {
@@ -58,7 +44,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             emailUser.username = lastname;
             emailUser.isVerified = true;
             yield userRepository.save(emailUser);
-            // Ensure req.user is set correctly
             req.login(emailUser, (err) => {
                 if (err) {
                     console.error("Login Error:", err);
@@ -69,7 +54,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             });
         }
         else {
-            // If user doesn't exist, create a new one
             const user = new users_1.User();
             user.googleId = googleId;
             user.firstname = firstname;
@@ -79,7 +63,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             user.username = lastname;
             user.role = "consumer"; // Default role
             yield userRepository.save(user);
-            // Ensure req.user is set correctly
             req.login(user, (err) => {
                 if (err) {
                     console.error("Login Error:", err);
@@ -99,7 +82,6 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
 router.get("/profile", (req, res) => {
     if (req.isAuthenticated()) {
         const user = req.user;
-        console.log(user); // Log the user object to check what is stored
         res.send(`Welcome, ${user.firstname} ${user.lastname}`);
     }
     else {

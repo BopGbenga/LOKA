@@ -37,13 +37,7 @@ export function setupPassport() {
         scope: ["profile", "email"],
       },
       (accessToken, refreshToken, profile, done) => {
-        // Here you can handle the user's information
         const email = profile.emails && profile.emails[0]?.value;
-
-        // Debugging logs for email access
-        console.log("Profile emails:", profile.emails); // Logs the emails array
-        console.log("Profile email:", profile.emails); // Logs the direct email if available
-        console.log("Extracted email:", email); // Logs the email that's being used for the user
 
         // If no email found in the response, throw an error
         if (!email) {
@@ -53,18 +47,16 @@ export function setupPassport() {
         const user: user = {
           googleId: profile.id,
           name: profile.displayName,
-          email: profile.emails?.[0]?.value ?? "No email provided", // Assuming profile contains an email
+          email: profile.emails?.[0]?.value ?? "No email provided",
         };
-        console.log("Google OAuth Profile:", user);
-        // You can save the user data in your database here
+
         return done(null, user);
       }
     )
   );
-  passport.serializeUser((user: any, done) => done(null, user)); // Store the full user object
+  passport.serializeUser((user: any, done) => done(null, user));
 
-  // Deserialize the full user object
   passport.deserializeUser((user: any, done) => {
-    done(null, user); // Retrieve and pass the full user object
+    done(null, user);
   });
 }

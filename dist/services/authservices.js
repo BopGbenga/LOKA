@@ -16,34 +16,44 @@ exports.resetPassword = exports.sendPasswordResetEmail = void 0;
 const ormConfig_1 = require("../ormConfig");
 const users_1 = require("../entities/users");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const tokengenerator_1 = require("../utils/tokengenerator");
 const emailsender_1 = require("../utils/emailsender");
+const tokengenerator_1 = require("../utils/tokengenerator");
 // Function to send reset email
 const sendPasswordResetEmail = (email, req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
     const user = yield userRepository.findOne({ where: { email } });
-    console.log(user);
     if (!user) {
         res.status(404).json({
-            message: "user not found",
+            message: "User not found",
             success: false,
         });
         return;
     }
-    const resetToken = (0, tokengenerator_1.generateResetToken)();
-    user.resetToken = resetToken;
-    user.tokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+    // Generate the reset code
+    const resetCode = (0, tokengenerator_1.generateResetCode)();
+    user.resetToken = resetCode;
+    user.tokenExpiry = new Date(Date.now() + 3600000); // 1 hour expiry time
     yield userRepository.save(user);
-    const resetLink = `${req.protocol}://${req.get("host")}/reset-password?token=${resetToken}`;
-    yield (0, emailsender_1.sendEmail)(user.email, "Password Reset", `Click here to reset your password: ${resetLink}`);
+    // Send the reset code via email
+    yield (0, emailsender_1.sendEmail)(user.email, "Password Reset Code", `Your password reset code is: ${resetCode}. It will expire in 1 hour.`);
+    res.status(200).json({
+        message: "Password reset code sent to your email",
+        success: true,
+    });
 });
 exports.sendPasswordResetEmail = sendPasswordResetEmail;
 // Controller to handle password reset
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { token, newPassword } = req.body;
-        if (!token || !newPassword) {
-            res.status(400).json({ message: "Token and new password are required" });
+        const { resetCode, newPassword, confirmPassword } = req.body;
+        if (!resetCode || !newPassword || !confirmPassword) {
+            res.status(400).json({
+                message: "Reset code and new password and Confirm password are required",
+            });
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            res.status(400).json({ message: "Passwords do not match" });
             return;
         }
         if (newPassword.length < 6) {
@@ -53,16 +63,18 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return;
         }
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
-        const user = yield userRepository.findOne({ where: { resetToken: token } });
+        const user = yield userRepository.findOne({
+            where: { resetToken: resetCode },
+        });
         if (!user) {
-            res.status(404).json({ message: "Invalid or expired token" });
+            res.status(404).json({ message: "Invalid or expired reset code" });
             return;
         }
         if (!user.tokenExpiry || user.tokenExpiry < new Date()) {
-            res.status(400).json({ message: "Token has expired" });
+            res.status(400).json({ message: "Reset code has expired" });
             return;
         }
-        console.log("Token expiry:", user.tokenExpiry);
+        console.log("Reset code expiry:", user.tokenExpiry);
         // Hash the new password and save the user
         user.password = yield bcrypt_1.default.hash(newPassword, 10);
         user.resetToken = null;

@@ -2,8 +2,9 @@ import { AppDataSource } from "../ormConfig";
 import { User } from "../entities/users";
 import bcrypt from "bcrypt";
 import { Request, Response, RequestHandler } from "express";
-import { generateResetToken } from "../utils/tokengenerator";
+import crypto from "crypto";
 import { sendEmail } from "../utils/emailsender";
+import { generateResetCode } from "../utils/tokengenerator";
 
 // Function to send reset email
 export const sendPasswordResetEmail = async (
@@ -13,30 +14,33 @@ export const sendPasswordResetEmail = async (
 ): Promise<void> => {
   const userRepository = AppDataSource.getRepository(User);
   const user = await userRepository.findOne({ where: { email } });
-  console.log(user);
 
   if (!user) {
     res.status(404).json({
-      message: "user not found",
+      message: "User not found",
       success: false,
     });
     return;
   }
 
-  const resetToken = generateResetToken();
-  user.resetToken = resetToken;
-  user.tokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+  // Generate the reset code
+  const resetCode = generateResetCode();
+  user.resetToken = resetCode;
+  user.tokenExpiry = new Date(Date.now() + 3600000); // 1 hour expiry time
 
   await userRepository.save(user);
 
-  const resetLink = `${req.protocol}://${req.get(
-    "host"
-  )}/reset-password?token=${resetToken}`;
+  // Send the reset code via email
   await sendEmail(
     user.email,
-    "Password Reset",
-    `Click here to reset your password: ${resetLink}`
+    "Password Reset Code",
+    `Your password reset code is: ${resetCode}. It will expire in 1 hour.`
   );
+
+  res.status(200).json({
+    message: "Password reset code sent to your email",
+    success: true,
+  });
 };
 
 // Controller to handle password reset
@@ -45,9 +49,16 @@ export const resetPassword: RequestHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { token, newPassword } = req.body;
-    if (!token || !newPassword) {
-      res.status(400).json({ message: "Token and new password are required" });
+    const { resetCode, newPassword, confirmPassword } = req.body;
+    if (!resetCode || !newPassword || !confirmPassword) {
+      res.status(400).json({
+        message:
+          "Reset code and new password and Confirm password are required",
+      });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      res.status(400).json({ message: "Passwords do not match" });
       return;
     }
     if (newPassword.length < 6) {
@@ -58,18 +69,20 @@ export const resetPassword: RequestHandler = async (
     }
 
     const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOne({ where: { resetToken: token } });
+    const user = await userRepository.findOne({
+      where: { resetToken: resetCode },
+    });
     if (!user) {
-      res.status(404).json({ message: "Invalid or expired token" });
+      res.status(404).json({ message: "Invalid or expired reset code" });
       return;
     }
 
     if (!user.tokenExpiry || user.tokenExpiry < new Date()) {
-      res.status(400).json({ message: "Token has expired" });
+      res.status(400).json({ message: "Reset code has expired" });
       return;
     }
 
-    console.log("Token expiry:", user.tokenExpiry);
+    console.log("Reset code expiry:", user.tokenExpiry);
 
     // Hash the new password and save the user
     user.password = await bcrypt.hash(newPassword, 10);

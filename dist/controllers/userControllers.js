@@ -33,21 +33,17 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { firstname, lastname, username, email, password, role } = req.body;
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
-        // Check for an existing user by email
-        console.log("Checking user for email:", email);
+        //check for existing user
         const existingUser = yield userRepository.findOne({ where: { email } });
-        console.log("Found user:", existingUser);
-        // If the user exists and is registered through Google OAuth, notify the user
-        if (existingUser && existingUser.googleId) {
+        if (existingUser === null || existingUser === void 0 ? void 0 : existingUser.googleId) {
             res.status(400).json({
                 message: "This email is already registered through Google OAuth.",
             });
             return;
         }
-        // If a user with the same email exists (either normal or Google), reject the creation
         if (existingUser) {
             res.status(400).json({
-                message: "User with this email already exists",
+                message: "User with email already exist",
             });
             return;
         }
@@ -69,9 +65,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const mailOptions = {
             from: process.env.EMAIL_USERNAME,
             to: newUser.email,
-            subject: "Verify Your Email",
+            subject: "Verify Email Address for Loka",
             html: `<p>Hello ${newUser.username},</p>
-                 <p>Thank you for registering! Please verify your email by clicking on the link below:</p>
+                 <p>Use the following link to confirm your email addres:</p>
                  <a href="${verificationLink}">Verify Email</a>`,
         };
         try {
@@ -173,9 +169,6 @@ const requestPasswordReset = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const { email } = req.body;
     try {
         yield (0, authservices_1.sendPasswordResetEmail)(email, req, res);
-        res
-            .status(200)
-            .json({ message: "Password reset link sent to your email." });
         return;
     }
     catch (error) {
@@ -185,10 +178,6 @@ const requestPasswordReset = (req, res) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.requestPasswordReset = requestPasswordReset;
 const resetPasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Request body:", req.body);
-    const { token, newPassword } = req.body;
-    console.log("Token:", token);
-    console.log("New Password:", newPassword);
     try {
         yield (0, authservices_1.resetPassword)(req, res, next);
     }
@@ -215,7 +204,8 @@ const updateUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             user.firstname = firstname;
         if (lastname)
             user.lastname = lastname;
-        // if (username) user.lastname = username;
+        if (username)
+            user.username = username;
         // if (email) user.email = email;
         yield userRepository.save(user);
         res.status(200).json({
