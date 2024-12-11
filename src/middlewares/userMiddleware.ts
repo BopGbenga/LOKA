@@ -26,11 +26,20 @@ export const validateUser = async (
       "string.empty": "username cannot be empty",
       "string.base": "invalid type,please provide a valid string",
     }),
-    password: Joi.string().min(6).required().messages({
-      "string.min": "Password must be at least 6 characters",
-      "any.required": "Password is required",
-      "string.empty": "Password cannot be empty",
-    }),
+    password: Joi.string()
+      .required()
+      .messages({
+        "any.required": "Password is required.",
+        "string.empty": "Password cannot be empty.",
+      })
+      .pattern(
+        new RegExp(
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+        )
+      )
+      .message(
+        "Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."
+      ),
     confirmPassword: Joi.string()
       .valid(Joi.ref("password"))
       .required()

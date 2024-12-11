@@ -82,7 +82,7 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             user.email = email;
             user.isVerified = true;
             user.username = lastname;
-            user.role = "consumer"; // Default role
+            user.role = null; // Default role
             yield userRepository.save(user);
             console.log("New user created:", user);
             req.login(user, (err) => {

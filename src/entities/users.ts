@@ -4,8 +4,11 @@ import {
   Column,
   BeforeInsert,
   BeforeUpdate,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
+import { ArtisanProfile } from "./artisans"; // Ensure you import the ArtisanProfile entity
 
 @Entity("users")
 export class User {
@@ -18,7 +21,7 @@ export class User {
   @Column({ type: "varchar", length: 100 })
   lastname!: string;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 100, unique: true })
   username!: string;
 
   @Column({ type: "varchar", length: 100, unique: true })
@@ -30,18 +33,20 @@ export class User {
   @Column({ type: "boolean", default: false })
   isVerified!: boolean;
 
+  @Column({ type: "enum", enum: ["buyer", "artisan"], nullable: true })
+  role!: "buyer" | "artisan" | null;
+
   @Column({ type: "varchar", nullable: true })
   resetToken!: string | null;
 
   @Column({ type: "timestamp", nullable: true })
   tokenExpiry!: Date | null;
 
-  @Column({
-    type: "enum",
-    enum: ["artisan", "consumer"],
-    default: "consumer",
+  @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
+    cascade: ["insert", "update"],
   })
-  role!: string;
+  @JoinColumn()
+  artisanProfile!: ArtisanProfile | null;
 
   @Column({ type: "varchar", nullable: true, unique: true }) // Store Google ID
   googleId!: string | null;
@@ -49,7 +54,7 @@ export class User {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt!: Date;
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ type: "timestamp", nullable: true, onUpdate: "CURRENT_TIMESTAMP" })
   updatedAt!: Date;
 
   @BeforeInsert()

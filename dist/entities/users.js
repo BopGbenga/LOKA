@@ -24,6 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const artisans_1 = require("./artisans"); // Ensure you import the ArtisanProfile entity
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +61,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastname", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 100 }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 100, unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
@@ -77,6 +78,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: "enum", enum: ["buyer", "artisan"], nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "role", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: "varchar", nullable: true }),
     __metadata("design:type", Object)
 ], User.prototype, "resetToken", void 0);
@@ -85,13 +90,12 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "tokenExpiry", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: "enum",
-        enum: ["artisan", "consumer"],
-        default: "consumer",
+    (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (profile) => profile.user, {
+        cascade: ["insert", "update"],
     }),
-    __metadata("design:type", String)
-], User.prototype, "role", void 0);
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", Object)
+], User.prototype, "artisanProfile", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }) // Store Google ID
     ,
@@ -102,7 +106,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "timestamp", nullable: true }),
+    (0, typeorm_1.Column)({ type: "timestamp", nullable: true, onUpdate: "CURRENT_TIMESTAMP" }),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
 __decorate([

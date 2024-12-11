@@ -5,6 +5,7 @@ import { Request, Response, RequestHandler } from "express";
 import crypto from "crypto";
 import { sendEmail } from "../utils/emailsender";
 import { generateResetCode } from "../utils/tokengenerator";
+import Joi from "joi";
 
 // Function to send reset email
 export const sendPasswordResetEmail = async (
@@ -44,27 +45,55 @@ export const sendPasswordResetEmail = async (
 };
 
 // Controller to handle password reset
+const passwordResetSchema = Joi.object({
+  resetCode: Joi.string().required().messages({
+    "any.required": '"resetCode" is required',
+    "string.empty": '"resetCode" cannot be empty',
+  }),
+  newPassword: Joi.string()
+    .required()
+    .messages({
+      "any.required": "Password is required.",
+      "string.empty": "Password cannot be empty.",
+    })
+    .pattern(
+      new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+      )
+    )
+    .message(
+      "Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."
+    ),
+  confirmPassword: Joi.string()
+    .valid(Joi.ref("newPassword"))
+    .required()
+    .messages({
+      "any.only": "Passwords do not match.",
+      "any.required": "Confirm password is required.",
+      "string.empty": "Confirm password cannot be empty.",
+    }),
+});
+
 export const resetPassword: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { resetCode, newPassword, confirmPassword } = req.body;
-    if (!resetCode || !newPassword || !confirmPassword) {
+    // Validate password and confirm password with Joi first
+    const { error } = passwordResetSchema.validate(req.body);
+    if (error) {
       res.status(400).json({
-        message:
-          "Reset code and new password and Confirm password are required",
+        message: error.details[0].message,
       });
       return;
     }
-    if (newPassword !== confirmPassword) {
-      res.status(400).json({ message: "Passwords do not match" });
-      return;
-    }
-    if (newPassword.length < 6) {
-      res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters long" });
+
+    const { resetCode, newPassword, confirmPassword } = req.body;
+
+    if (!resetCode || !newPassword || !confirmPassword) {
+      res.status(400).json({
+        message: "Reset code, new password, and confirm password are required",
+      });
       return;
     }
 
@@ -72,6 +101,7 @@ export const resetPassword: RequestHandler = async (
     const user = await userRepository.findOne({
       where: { resetToken: resetCode },
     });
+
     if (!user) {
       res.status(404).json({ message: "Invalid or expired reset code" });
       return;
@@ -81,8 +111,6 @@ export const resetPassword: RequestHandler = async (
       res.status(400).json({ message: "Reset code has expired" });
       return;
     }
-
-    console.log("Reset code expiry:", user.tokenExpiry);
 
     // Hash the new password and save the user
     user.password = await bcrypt.hash(newPassword, 10);

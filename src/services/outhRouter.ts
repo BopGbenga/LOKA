@@ -24,7 +24,10 @@ router.get("/", (req, res) => {
   `);
 });
 // Route to start Google authentication
-router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 // Route to initiate login
 router.get(
@@ -79,7 +82,7 @@ router.get(
         user.email = email;
         user.isVerified = true;
         user.username = lastname;
-        user.role = "consumer"; // Default role
+        user.role = null; // Default role
 
         await userRepository.save(user);
         console.log("New user created:", user);

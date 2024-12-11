@@ -9,6 +9,15 @@ export interface CreateUserDTO {
   role: string;
 }
 
+export interface CreateArtisanDTO {
+  userId: number;
+  businessName: string;
+  businessCategory: string;
+  businessLocation: string;
+  businessDescription: string;
+  contactInformation: string;
+}
+
 export interface LoginUserDTO {
   email: string;
   password: string;

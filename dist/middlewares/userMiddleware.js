@@ -34,11 +34,14 @@ const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             "string.empty": "username cannot be empty",
             "string.base": "invalid type,please provide a valid string",
         }),
-        password: joi_1.default.string().min(6).required().messages({
-            "string.min": "Password must be at least 6 characters",
-            "any.required": "Password is required",
-            "string.empty": "Password cannot be empty",
-        }),
+        password: joi_1.default.string()
+            .required()
+            .messages({
+            "any.required": "Password is required.",
+            "string.empty": "Password cannot be empty.",
+        })
+            .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
+            .message("Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."),
         confirmPassword: joi_1.default.string()
             .valid(joi_1.default.ref("password"))
             .required()
