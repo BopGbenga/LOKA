@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
   migrations: ["src/migration/**/*.ts"],
   // migrations: [path.join(__dirname, "/migrations/*.ts")],
   migrationsTableName: "migrations_history", // Adds a custom table name for tracking migrations
-  ssl: {
-    rejectUnauthorized: false, // Set to false if using self-signed certificates
-  },
+  // ssl: {
+  //   rejectUnauthorized: false, // Set to false if using self-signed certificates
+  // },
 });
