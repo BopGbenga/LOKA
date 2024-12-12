@@ -139,6 +139,11 @@ export const verifyEmail = async (
       return;
     }
 
+    if (user.isVerified) {
+      res.status(400).json({ message: "Email is already verified." });
+      return;
+    }
+
     user.isVerified = true;
     await userRepository.save(user);
 

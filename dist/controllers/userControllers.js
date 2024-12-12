@@ -117,6 +117,10 @@ const verifyEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             res.status(404).json({ message: "User not found" });
             return;
         }
+        if (user.isVerified) {
+            res.status(400).json({ message: "Email is already verified." });
+            return;
+        }
         user.isVerified = true;
         yield userRepository.save(user);
         res.status(200).json({ message: "Email verified successfully" });
