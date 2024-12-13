@@ -76,8 +76,8 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             });
             return;
         }
-        const { resetCode, Password, confirmPassword } = req.body;
-        if (!resetCode || !Password || !confirmPassword) {
+        const { resetCode, newPassword, confirmPassword } = req.body;
+        if (!resetCode || !newPassword || !confirmPassword) {
             res.status(400).json({
                 message: "Reset code, new password, and confirm password are required",
             });
@@ -96,7 +96,7 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return;
         }
         // Hash the new password and save the user
-        user.password = yield bcrypt_1.default.hash(Password, 10);
+        user.password = yield bcrypt_1.default.hash(newPassword, 10);
         user.resetToken = null;
         user.tokenExpiry = null;
         yield userRepository.save(user);

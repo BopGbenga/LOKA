@@ -87,9 +87,9 @@ export const resetPassword: RequestHandler = async (
       return;
     }
 
-    const { resetCode, Password, confirmPassword } = req.body;
+    const { resetCode, newPassword, confirmPassword } = req.body;
 
-    if (!resetCode || !Password || !confirmPassword) {
+    if (!resetCode || !newPassword || !confirmPassword) {
       res.status(400).json({
         message: "Reset code, new password, and confirm password are required",
       });
@@ -112,7 +112,7 @@ export const resetPassword: RequestHandler = async (
     }
 
     // Hash the new password and save the user
-    user.password = await bcrypt.hash(Password, 10);
+    user.password = await bcrypt.hash(newPassword, 10);
     user.resetToken = null;
     user.tokenExpiry = null;
 
