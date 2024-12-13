@@ -53,8 +53,8 @@ const passwordResetSchema = Joi.object({
   newpassword: Joi.string()
     .required()
     .messages({
-      "any.required": "Password is required.",
-      "string.empty": "Password cannot be empty.",
+      "any.required": " newPassword is required.",
+      "string.empty": "newPassword cannot be empty.",
     })
     .pattern(
       new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^ws])[A-Za-zdWS]{8,}$")
