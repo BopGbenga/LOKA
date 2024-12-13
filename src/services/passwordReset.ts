@@ -62,7 +62,6 @@ const passwordResetSchema = Joi.object({
     .message(
       "Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."
     ),
-
   confirmPassword: Joi.string()
     .valid(Joi.ref("newPassword"))
     .required()
