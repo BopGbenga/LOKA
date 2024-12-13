@@ -50,13 +50,13 @@ const passwordResetSchema = joi_1.default.object({
         "string.empty": '"resetCode" cannot be empty',
     }),
     newPassword: joi_1.default.string()
+        .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d])[A-Za-z\\d\\S]{8,}$"))
         .required()
         .messages({
         "any.required": "newPassword is required.",
         "string.empty": "newPassword cannot be empty.",
-    })
-        .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^ws])[A-Za-zdWS]{8,}$"))
-        .message("Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."),
+        "string.pattern.base": "Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters.",
+    }),
     confirmPassword: joi_1.default.string()
         .valid(joi_1.default.ref("newPassword"))
         .required()
