@@ -50,7 +50,7 @@ const passwordResetSchema = Joi.object({
     "any.required": '"resetCode" is required',
     "string.empty": '"resetCode" cannot be empty',
   }),
-  password: Joi.string()
+  newpassword: Joi.string()
     .required()
     .messages({
       "any.required": "Password is required.",
