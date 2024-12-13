@@ -50,7 +50,7 @@ const passwordResetSchema = Joi.object({
     "any.required": '"resetCode" is required',
     "string.empty": '"resetCode" cannot be empty',
   }),
-  newpassword: Joi.string()
+  password: Joi.string()
     .required()
     .messages({
       "any.required": "Password is required.",
@@ -87,9 +87,9 @@ export const resetPassword: RequestHandler = async (
       return;
     }
 
-    const { resetCode, newPassword, confirmPassword } = req.body;
+    const { resetCode, Password, confirmPassword } = req.body;
 
-    if (!resetCode || !newPassword || !confirmPassword) {
+    if (!resetCode || !Password || !confirmPassword) {
       res.status(400).json({
         message: "Reset code, new password, and confirm password are required",
       });
@@ -112,7 +112,7 @@ export const resetPassword: RequestHandler = async (
     }
 
     // Hash the new password and save the user
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = await bcrypt.hash(Password, 10);
     user.resetToken = null;
     user.tokenExpiry = null;
 
