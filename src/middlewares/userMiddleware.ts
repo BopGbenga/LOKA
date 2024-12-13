@@ -34,12 +34,13 @@ export const validateUser = async (
       })
       .pattern(
         new RegExp(
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^ws])[A-Za-zdWS]{8,}$"
         )
       )
       .message(
         "Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters."
       ),
+
     confirmPassword: Joi.string()
       .valid(Joi.ref("password"))
       .required()
