@@ -53,7 +53,7 @@ const passwordResetSchema = Joi.object({
   newpassword: Joi.string()
     .required()
     .messages({
-      "any.required": " newPassword is required.",
+      "any.required": "newPassword is required.",
       "string.empty": "newPassword cannot be empty.",
     })
     .pattern(
