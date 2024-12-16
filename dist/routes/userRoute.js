@@ -13,5 +13,7 @@ router.post("/login", userMiddleware_1.validateLogin, rateLimit_1.default, userC
 router.post("/request-password-reset", rateLimit_1.default, userControllers_1.requestPasswordReset);
 router.post("/reset-password", rateLimit_1.default, userControllers_1.resetPasswordController);
 router.get("/verify-email", userControllers_1.verifyEmail);
+router.post("/select-role", userControllers_1.selectRole);
+router.post("/artisan-details", userMiddleware_1.artisansField, userControllers_1.artisandetails);
 router.put("/updateProfile");
 exports.default = router;

@@ -20,7 +20,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     logging: false,
     migrations: ["src/migration/**/*.ts"],
     migrationsTableName: "migrations_history",
-    // ssl: {
-    //   rejectUnauthorized: false, // Set to false if using self-signed certificates
-    // },
+    ssl: {
+        rejectUnauthorized: false, // Set to false if using self-signed certificates
+    },
 });

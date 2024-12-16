@@ -90,15 +90,18 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "tokenExpiry", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (profile) => profile.user, {
-        cascade: ["insert", "update"],
-    }),
+    (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (artisanProfile) => artisanProfile.user, {
+        nullable: true,
+    })
+    // @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
+    //   cascade: ["insert", "update"],
+    // })
+    ,
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Object)
 ], User.prototype, "artisanProfile", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }) // Store Google ID
-    ,
+    (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }),
     __metadata("design:type", Object)
 ], User.prototype, "googleId", void 0);
 __decorate([

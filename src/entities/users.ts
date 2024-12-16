@@ -42,13 +42,17 @@ export class User {
   @Column({ type: "timestamp", nullable: true })
   tokenExpiry!: Date | null;
 
-  @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
-    cascade: ["insert", "update"],
+  @OneToOne(() => ArtisanProfile, (artisanProfile) => artisanProfile.user, {
+    nullable: true,
   })
+
+  // @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
+  //   cascade: ["insert", "update"],
+  // })
   @JoinColumn()
   artisanProfile!: ArtisanProfile | null;
 
-  @Column({ type: "varchar", nullable: true, unique: true }) // Store Google ID
+  @Column({ type: "varchar", nullable: true, unique: true })
   googleId!: string | null;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

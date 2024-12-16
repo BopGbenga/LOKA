@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateLogin = exports.validateUser = void 0;
+exports.artisansField = exports.validateLogin = exports.validateUser = void 0;
 const joi_1 = __importDefault(require("joi"));
 const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const schema = joi_1.default.object({
@@ -94,3 +94,60 @@ const validateLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.validateLogin = validateLogin;
+const artisansField = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const artisanSchema = joi_1.default.object({
+            userId: joi_1.default.number().required().messages({
+                "any.required": "userId is required",
+                "number.base": "userId should be a number",
+            }),
+            businessName: joi_1.default.string().required().messages({
+                "any.required": "businessName is required",
+                "string.empty": "field cannot be empty",
+                "string.base": "invalid type, please provide a valid string",
+            }),
+            businessDescription: joi_1.default.string().required().messages({
+                "any.required": "businessDescription is required",
+                "string.empty": "field cannot be empty",
+                "string.base": "invalid type, please provide a valid string",
+            }),
+            businessCategory: joi_1.default.string().required().messages({
+                "any.required": "businessCategory is required",
+                "string.empty": "field cannot be empty",
+                "string.base": "invalid type, please provide a valid string",
+            }),
+            businessLocation: joi_1.default.string().required().messages({
+                "any.required": "businessLocation is required",
+                "string.empty": "field cannot be empty",
+            }),
+            contactInformation: joi_1.default.string().required().messages({
+                "any.required": "contactInformation is required",
+                "string.empty": "field cannot be empty",
+            }),
+        });
+        // Validate the request body using Joi
+        const { error } = yield artisanSchema.validate(req.body, {
+            abortEarly: false,
+        });
+        // If there are validation errors, map them and send a response
+        if (error) {
+            const errorMessages = error.details.map((detail) => detail.message);
+            res.status(422).json({
+                message: "Validation failed",
+                success: false,
+                errors: errorMessages,
+            });
+            return;
+        }
+        // If validation passes, proceed to the next middleware or route handler
+        next();
+    }
+    catch (error) {
+        console.error("Error during validation:", error);
+        res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
+    }
+});
+exports.artisansField = artisansField;

@@ -279,6 +279,15 @@ export const artisandetails = async (
       res.status(404).json({ message: "Artisan not found." });
       return;
     }
+
+    if (user.artisanProfile) {
+      res
+        .status(400)
+        .json({ message: "Artisan profile already exists for this user." });
+      return;
+    }
+
+
     const artisanProfile = artisanProfileRepository.create({
       businessName,
       businessDescription,
@@ -289,6 +298,15 @@ export const artisandetails = async (
     });
 
     await artisanProfileRepository.save(artisanProfile);
+    user.artisanProfile = artisanProfile;
+    await userRepository.save(user);
+
+    console.log("Artisan profile created and user updated");
+
+    res.status(200).json({
+      message: "Artisan profile created successfully",
+      artisanProfile,
+    });
   } catch (error) {
     console.error("Error saving artisan details:", error);
     res.status(500).json({ message: "Internal server error" });

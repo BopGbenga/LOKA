@@ -16,16 +16,16 @@ export class ArtisanProfile {
   businessName!: string;
 
   @Column()
-  businessCategory!: string; 
+  businessCategory!: string;
 
   @Column()
-  businessLocation!: string; 
+  businessLocation!: string;
 
   @Column({ type: "text", nullable: true })
   businessDescription!: string;
 
   @Column()
-  contactInformation!: string; 
+  contactInformation!: string;
 
   // Relationship with User
   @OneToOne(() => User, (user) => user.artisanProfile, { cascade: true })

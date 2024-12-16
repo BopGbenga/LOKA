@@ -11,7 +11,7 @@
     "serve": "nodemon dist/index.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:migrate": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/ormConfig.ts",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./src/ormConfig.ts src/migrations/CreateUserTable",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./src/ormConfig.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./src/data-source.ts",
     "typeorm:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create -n -f ./src/ormconfig.ts"
@@ -36,6 +36,7 @@
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.20",
     "typescript": "^5.7.2"
   },
   "dependencies": {
@@ -54,7 +55,6 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.13.1",
-    "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.20"
+    "reflect-metadata": "^0.2.2"
   }
 }
