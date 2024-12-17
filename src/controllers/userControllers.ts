@@ -147,7 +147,8 @@ export const verifyEmail = async (
     user.isVerified = true;
     await userRepository.save(user);
 
-    res.status(200).json({ message: "Email verified successfully" });
+    // Redirect to the frontend verification page
+    res.redirect("http://localhost:5174/VerifyEmail");
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: "Invalid or expired token" });
@@ -286,7 +287,6 @@ export const artisandetails = async (
         .json({ message: "Artisan profile already exists for this user." });
       return;
     }
-
 
     const artisanProfile = artisanProfileRepository.create({
       businessName,

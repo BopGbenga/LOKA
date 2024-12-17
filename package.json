@@ -12,9 +12,9 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:migrate": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/ormConfig.ts",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./src/ormConfig.ts",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts",
-    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./src/data-source.ts",
-    "typeorm:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create -n -f ./src/ormconfig.ts"
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/ormConfig.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./src/ormConfig.ts",
+    "typeorm:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create"
   },
   "author": "Gbenga",
   "license": "ISC",
