@@ -19,7 +19,7 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: ["https://loka-1.onrender.com", "http://localhost:5173"],
+    origin: ["https://loka-1.onrender.com", "http://localhost:5174"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
