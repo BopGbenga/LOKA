@@ -148,7 +148,6 @@ export const verifyEmail = async (
     await userRepository.save(user);
 
     // Redirect to the frontend verification page
-    res.redirect("http://localhost:5174/VerifyEmail");
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: "Invalid or expired token" });
