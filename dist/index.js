@@ -18,7 +18,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 app.use((0, cors_1.default)({
-    origin: ["https://loka-1.onrender.com", "http://localhost:5174"],
+    origin: ["https://loka-1.onrender.com", "https://lokatest.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
