@@ -123,7 +123,8 @@ const verifyEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         user.isVerified = true;
         yield userRepository.save(user);
-        res.status(200).json({ message: "Email verified successfully" });
+        res.redirect("http://localhost:5174/VerifyEmail");
+        // res.status(200).json({ message: "Email verified successfully" });
     }
     catch (error) {
         console.error(error);

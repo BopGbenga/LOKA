@@ -147,7 +147,8 @@ export const verifyEmail = async (
     user.isVerified = true;
     await userRepository.save(user);
 
-    res.status(200).json({ message: "Email verified successfully" });
+    res.redirect("http://localhost:5174/VerifyEmail");
+    // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: "Invalid or expired token" });
