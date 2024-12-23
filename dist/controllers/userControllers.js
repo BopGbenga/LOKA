@@ -123,7 +123,7 @@ const verifyEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         user.isVerified = true;
         yield userRepository.save(user);
-        res.redirect("https://lokatest.vercel.app/VerifyEmail");
+        res.redirect("http://localhost:5173/VerifyEmail");
         // res.status(200).json({ message: "Email verified successfully" });
     }
     catch (error) {

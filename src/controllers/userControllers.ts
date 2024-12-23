@@ -147,7 +147,7 @@ export const verifyEmail = async (
     user.isVerified = true;
     await userRepository.save(user);
 
-    res.redirect("https://lokatest.vercel.app/VerifyEmail");
+    res.redirect("http://localhost:5173/VerifyEmail");
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
     console.error(error);
