@@ -24,7 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const artisans_1 = require("./artisans"); // Ensure you import the ArtisanProfile entity
+const artisans_1 = require("./artisans");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {

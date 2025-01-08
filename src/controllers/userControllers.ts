@@ -147,7 +147,13 @@ export const verifyEmail = async (
     user.isVerified = true;
     await userRepository.save(user);
 
-    res.redirect("http://localhost:5173/VerifyEmail");
+    const newToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1h" }
+    );
+
+    res.redirect(`http://localhost:5173/VerifyEmail${newToken}`);
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
     console.error(error);

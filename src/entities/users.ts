@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
-import { ArtisanProfile } from "./artisans"; // Ensure you import the ArtisanProfile entity
+import { ArtisanProfile } from "./artisans";
 
 @Entity("users")
 export class User {
