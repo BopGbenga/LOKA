@@ -153,7 +153,7 @@ export const verifyEmail = async (
       { expiresIn: "1h" }
     );
 
-    res.redirect(`http://localhost:5173/VerifyEmail${newToken}`);
+    res.redirect(`http://localhost:5173/VerifyEmail?token=${newToken}`);
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
     console.error(error);
