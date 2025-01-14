@@ -19,7 +19,7 @@ export class ArtisanProfile {
   businessCategory!: string;
 
   @Column()
-  businessLocation!: string;
+  state!: string;
 
   @Column({ type: "text", nullable: true })
   businessDescription!: string;

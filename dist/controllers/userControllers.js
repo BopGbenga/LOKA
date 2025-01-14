@@ -221,7 +221,7 @@ exports.selectRole = selectRole;
 //create Artisan
 const artisandetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, businessName, businessDescription, businessCategory, businessLocation, contactInformation, } = req.body;
+        const { userId, businessName, businessDescription, businessCategory, state, contactInformation, } = req.body;
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         const artisanProfileRepository = ormConfig_1.AppDataSource.getRepository(artisans_1.ArtisanProfile);
         const user = yield userRepository.findOne({
@@ -242,7 +242,7 @@ const artisandetails = (req, res) => __awaiter(void 0, void 0, void 0, function*
             businessName,
             businessDescription,
             businessCategory,
-            businessLocation,
+            state,
             contactInformation,
             user,
         });

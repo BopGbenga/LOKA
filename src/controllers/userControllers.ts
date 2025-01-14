@@ -154,6 +154,7 @@ export const verifyEmail = async (
     );
 
     res.redirect(`http://localhost:5173/VerifyEmail?token=${newToken}`);
+
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
     console.error(error);
@@ -271,7 +272,7 @@ export const artisandetails = async (
       businessName,
       businessDescription,
       businessCategory,
-      businessLocation,
+      state,
       contactInformation,
     } = req.body as CreateArtisanDTO;
 
@@ -298,7 +299,7 @@ export const artisandetails = async (
       businessName,
       businessDescription,
       businessCategory,
-      businessLocation,
+      state,
       contactInformation,
       user,
     });

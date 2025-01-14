@@ -15,8 +15,11 @@ import {
   selectRole,
   artisandetails,
 } from "../controllers/userControllers";
+import { getStates } from "../controllers/states";
 
 const router = Router();
+
+router.get("/states", getStates);
 
 router.post("/signup", validateUser, limiter, createUser);
 router.post("/login", validateLogin, limiter, loginUser);

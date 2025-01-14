@@ -13,7 +13,7 @@ export interface CreateArtisanDTO {
   userId: number;
   businessName: string;
   businessCategory: string;
-  businessLocation: string;
+  state: string;
   businessDescription: string;
   contactInformation: string;
 }
