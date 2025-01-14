@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 export const getStates = (req: Request, res: Response): void => {
   try {
-    const filePath = path.join(__dirname, "../data/states.json"); // Adjust path based on your project structure
+    const filePath = path.resolve(__dirname, "../../data/states.json"); // Adjust path based on your project structure
     const data = fs.readFileSync(filePath, "utf-8");
     const states = JSON.parse(data);
 

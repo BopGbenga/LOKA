@@ -38,7 +38,7 @@ const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const getStates = (req, res) => {
     try {
-        const filePath = path.join(__dirname, "../data/states.json"); // Adjust path based on your project structure
+        const filePath = path.resolve(__dirname, "../../data/states.json"); // Adjust path based on your project structure
         const data = fs.readFileSync(filePath, "utf-8");
         const states = JSON.parse(data);
         res.status(200).json({
