@@ -306,7 +306,7 @@ const updateUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         // if (email) user.email = email;
         yield userRepository.save(user);
         res.status(200).json({
-            message: "User updated successfully",
+            message: "Your profile has been updated successfully",
             data: user,
         });
     }

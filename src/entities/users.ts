@@ -6,9 +6,12 @@ import {
   BeforeUpdate,
   OneToOne,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
 import bcrypt from "bcrypt";
 import { ArtisanProfile } from "./artisans";
+import { category } from "./category";
 
 @Entity("users")
 export class User {
@@ -45,6 +48,9 @@ export class User {
   @OneToOne(() => ArtisanProfile, (artisanProfile) => artisanProfile.user, {
     nullable: true,
   })
+  @ManyToMany(() => category)
+  @JoinTable() // This creates a join table for many-to-many relation
+  interests!: category[];
 
   // @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
   //   cascade: ["insert", "update"],
