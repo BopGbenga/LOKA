@@ -17,7 +17,7 @@ export class products {
   name!: string;
 
   @Column({ unique: true })
-  desciption!: string;
+  description!: string;
 
   @Column("decimal")
   price!: number;

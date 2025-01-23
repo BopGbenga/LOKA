@@ -26,7 +26,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
-], products.prototype, "desciption", void 0);
+], products.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.Column)("decimal"),
     __metadata("design:type", Number)
