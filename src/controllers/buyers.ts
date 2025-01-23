@@ -6,7 +6,7 @@ import { products } from "../entities/products";
 import { In, Not } from "typeorm";
 
 //user interest
-const userInterest: RequestHandler = async (
+export const userInterest: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {

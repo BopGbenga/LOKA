@@ -25,6 +25,7 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const artisans_1 = require("./artisans");
+const category_1 = require("./category");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -92,11 +93,13 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (artisanProfile) => artisanProfile.user, {
         nullable: true,
-    })
-    // @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
-    //   cascade: ["insert", "update"],
-    // })
+    }),
+    (0, typeorm_1.ManyToMany)(() => category_1.category),
+    (0, typeorm_1.JoinTable)() // This creates a join table for many-to-many relation
     ,
+    __metadata("design:type", Array)
+], User.prototype, "interests", void 0);
+__decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Object)
 ], User.prototype, "artisanProfile", void 0);

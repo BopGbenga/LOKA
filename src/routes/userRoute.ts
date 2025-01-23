@@ -16,6 +16,7 @@ import {
   artisandetails,
 } from "../controllers/userControllers";
 import { getStates } from "../controllers/states";
+import { userInterest } from "../controllers/buyers";
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.get("/verify-email", verifyEmail);
 router.post("/select-role", selectRole);
 router.post("/artisan-details", artisansField, artisandetails);
 router.put("/updateProfile");
+router.get("dashboard/prodcuts", userInterest);
 
 export default router;
