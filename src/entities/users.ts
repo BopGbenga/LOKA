@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import bcrypt from "bcrypt";
 import { ArtisanProfile } from "./artisans";
-import { category } from "./category";
+import { Category } from "./category";
 
 @Entity("users")
 export class User {
@@ -48,15 +48,12 @@ export class User {
   @OneToOne(() => ArtisanProfile, (artisanProfile) => artisanProfile.user, {
     nullable: true,
   })
-  @ManyToMany(() => category)
-  @JoinTable() // This creates a join table for many-to-many relation
-  interests!: category[];
-
-  // @OneToOne(() => ArtisanProfile, (profile) => profile.user, {
-  //   cascade: ["insert", "update"],
-  // })
   @JoinColumn()
   artisanProfile!: ArtisanProfile | null;
+
+  @ManyToMany(() => Category)
+  @JoinTable()
+  interests!: Category[];
 
   @Column({ type: "varchar", nullable: true, unique: true })
   googleId!: string | null;

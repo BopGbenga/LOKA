@@ -34,14 +34,14 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], products.prototype, "stockQuality", void 0);
+], products.prototype, "stockQuantity", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], products.prototype, "images", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => category_1.category, (category) => category.products, { eager: true }),
-    __metadata("design:type", category_1.category)
+    (0, typeorm_1.ManyToOne)(() => category_1.Category, (category) => category.products, { eager: true }),
+    __metadata("design:type", category_1.Category)
 ], products.prototype, "category", void 0);
 __decorate([
     (0, typeorm_1.Column)(),

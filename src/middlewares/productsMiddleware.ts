@@ -21,7 +21,7 @@ export const validateProducts = async (
       "any.required": "price is required",
       "number.base": "invalid type,please provide a valid number",
     }),
-    stockQuality: Joi.number().required().messages({
+    stockQuantity: Joi.number().required().messages({
       "string.empty": "stock quality cannot be empty",
       "any.required": "stock quality is required",
     }),

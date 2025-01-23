@@ -1,7 +1,7 @@
 import { Request, Response, RequestHandler, NextFunction } from "express";
 import { User } from "../entities/users";
 import { AppDataSource } from "../ormConfig";
-import { category } from "../entities/category";
+import { Category } from "../entities/category";
 import { products } from "../entities/products";
 import { In, Not } from "typeorm";
 

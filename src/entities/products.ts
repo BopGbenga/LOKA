@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { category } from "./category";
+import { Category } from "./category";
 
 @Entity()
 export class products {
@@ -23,13 +23,13 @@ export class products {
   price!: number;
 
   @Column()
-  stockQuality!: number;
+  stockQuantity!: number;
 
   @Column()
   images!: string;
 
-  @ManyToOne(() => category, (category) => category.products, { eager: true })
-  category!: category;
+  @ManyToOne(() => Category, (category) => category.products, { eager: true })
+  category!: Category;
 
   @Column()
   availability!: boolean;

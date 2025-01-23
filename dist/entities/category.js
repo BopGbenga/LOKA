@@ -9,36 +9,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.category = void 0;
+exports.Category = void 0;
 const typeorm_1 = require("typeorm");
 const products_1 = require("./products");
-let category = class category {
+let Category = class Category {
 };
-exports.category = category;
+exports.Category = Category;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], category.prototype, "id", void 0);
+], Category.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
-], category.prototype, "name", void 0);
+], Category.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
-], category.prototype, "description", void 0);
+], Category.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => products_1.products, (product) => product.category),
     __metadata("design:type", Array)
-], category.prototype, "products", void 0);
+], Category.prototype, "products", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
-], category.prototype, "createdAt", void 0);
+], Category.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
-], category.prototype, "updatedAt", void 0);
-exports.category = category = __decorate([
+], Category.prototype, "updatedAt", void 0);
+exports.Category = Category = __decorate([
     (0, typeorm_1.Entity)()
-], category);
+], Category);

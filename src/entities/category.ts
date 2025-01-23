@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { products } from "./products";
 @Entity()
-export class category {
+export class Category {
   @PrimaryGeneratedColumn()
   id!: number;
 

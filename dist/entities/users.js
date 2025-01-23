@@ -94,15 +94,14 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (artisanProfile) => artisanProfile.user, {
         nullable: true,
     }),
-    (0, typeorm_1.ManyToMany)(() => category_1.category),
-    (0, typeorm_1.JoinTable)() // This creates a join table for many-to-many relation
-    ,
-    __metadata("design:type", Array)
-], User.prototype, "interests", void 0);
-__decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Object)
 ], User.prototype, "artisanProfile", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => category_1.Category),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], User.prototype, "interests", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }),
     __metadata("design:type", Object)
