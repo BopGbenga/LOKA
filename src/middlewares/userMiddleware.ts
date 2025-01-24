@@ -124,6 +124,11 @@ export const artisansField = async (
         "any.required": "businessLocation is required",
         "string.empty": "field cannot be empty",
       }),
+      state: Joi.string().required().messages({
+        "any.required": "state is required",
+        "string.empty": "field cannot be empty",
+        "string.base": "invalid type, please provide a valid string",
+      }),
       contactInformation: Joi.string().required().messages({
         "any.required": "contactInformation is required",
         "string.empty": "field cannot be empty",
