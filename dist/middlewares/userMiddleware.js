@@ -116,10 +116,10 @@ const artisansField = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 "string.empty": "field cannot be empty",
                 "string.base": "invalid type, please provide a valid string",
             }),
-            businessLocation: joi_1.default.string().required().messages({
-                "any.required": "businessLocation is required",
-                "string.empty": "field cannot be empty",
-            }),
+            // businessLocation: Joi.string().required().messages({
+            //   "any.required": "businessLocation is required",
+            //   "string.empty": "field cannot be empty",
+            // }),
             state: joi_1.default.string().required().messages({
                 "any.required": "state is required",
                 "string.empty": "field cannot be empty",
