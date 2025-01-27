@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.products = void 0;
 const typeorm_1 = require("typeorm");
 const category_1 = require("./category");
+const users_1 = require("./users");
 let products = class products {
 };
 exports.products = products;
@@ -43,6 +44,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => category_1.Category, (category) => category.products, { eager: true }),
     __metadata("design:type", category_1.Category)
 ], products.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => users_1.User, (user) => user.products, { onDelete: "CASCADE" }),
+    __metadata("design:type", users_1.User)
+], products.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)

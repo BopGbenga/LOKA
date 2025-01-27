@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "../ormConfig";
 dotenv.config();
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: {
     id: number;
     email: string;

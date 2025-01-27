@@ -26,6 +26,7 @@ const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const artisans_1 = require("./artisans");
 const category_1 = require("./category");
+const products_1 = require("./products");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -102,6 +103,10 @@ __decorate([
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], User.prototype, "interests", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => products_1.products, (products) => products.user),
+    __metadata("design:type", Array)
+], User.prototype, "products", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", nullable: true, unique: true }),
     __metadata("design:type", Object)

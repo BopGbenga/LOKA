@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./category";
+import { User } from "./users";
 
 @Entity()
 export class products {
@@ -30,6 +31,9 @@ export class products {
 
   @ManyToOne(() => Category, (category) => category.products, { eager: true })
   category!: Category;
+
+  @ManyToOne(() => User, (user) => user.products, { onDelete: "CASCADE" })
+  user!: User;
 
   @Column()
   availability!: boolean;

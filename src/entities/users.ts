@@ -5,6 +5,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToOne,
+  OneToMany,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -12,6 +13,7 @@ import {
 import bcrypt from "bcrypt";
 import { ArtisanProfile } from "./artisans";
 import { Category } from "./category";
+import { products } from "./products";
 
 @Entity("users")
 export class User {
@@ -55,6 +57,8 @@ export class User {
   @JoinTable()
   interests!: Category[];
 
+  @OneToMany(() => products, (products) => products.user)
+  products!: products[];
   @Column({ type: "varchar", nullable: true, unique: true })
   googleId!: string | null;
 

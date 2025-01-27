@@ -12,9 +12,8 @@ import {
   updateUsers,
   requestPasswordReset,
   resetPasswordController,
-  selectRole,
-  artisandetails,
 } from "../controllers/userControllers";
+import { selectRole, artisandetails } from "../controllers/artisan";
 import { getStates } from "../controllers/states";
 import { userInterest } from "../controllers/buyers";
 
