@@ -68,7 +68,7 @@ const passwordResetSchema = joi_1.default.object({
 });
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Validate password and confirm password with Joi first
+        // Validate password and confirm password with Joi
         const { error } = passwordResetSchema.validate(req.body);
         if (error) {
             res.status(400).json({

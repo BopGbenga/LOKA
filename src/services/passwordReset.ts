@@ -78,7 +78,7 @@ export const resetPassword: RequestHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    // Validate password and confirm password with Joi first
+    // Validate password and confirm password with Joi
     const { error } = passwordResetSchema.validate(req.body);
     if (error) {
       res.status(400).json({

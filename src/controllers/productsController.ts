@@ -39,6 +39,40 @@ export const getAllProducts = async (
   }
 };
 
+export const getUserProducts = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    // Get repository
+    const productRepository: Repository<products> =
+      AppDataSource.getRepository(products);
+
+    // Fetch products where user ID matches
+    const userProducts = await productRepository.find({
+      where: { user: { id: userId } },
+      order: { createdAt: "DESC" },
+    });
+
+    if (userProducts.length === 0) {
+      res.status(404).json({ message: "No products found for this user" });
+      return;
+    }
+
+    res.status(200).json(userProducts);
+  } catch (error) {
+    console.error("Error fetching user products:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 //get product by id
 export const getProductById: RequestHandler = async (
   req: Request,

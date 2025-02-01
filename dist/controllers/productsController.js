@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductById = exports.getAllProducts = void 0;
+exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductById = exports.getUserProducts = exports.getAllProducts = void 0;
 const products_1 = require("../entities/products");
 const category_1 = require("../entities/category");
 const ormConfig_1 = require("../ormConfig");
@@ -36,6 +36,33 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getAllProducts = getAllProducts;
+const getUserProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            res.status(401).json({ message: "Unauthorized" });
+            return;
+        }
+        // Get repository
+        const productRepository = ormConfig_1.AppDataSource.getRepository(products_1.products);
+        // Fetch products where user ID matches
+        const userProducts = yield productRepository.find({
+            where: { user: { id: userId } },
+            order: { createdAt: "DESC" },
+        });
+        if (userProducts.length === 0) {
+            res.status(404).json({ message: "No products found for this user" });
+            return;
+        }
+        res.status(200).json(userProducts);
+    }
+    catch (error) {
+        console.error("Error fetching user products:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getUserProducts = getUserProducts;
 //get product by id
 const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
