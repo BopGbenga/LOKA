@@ -26,7 +26,7 @@ export const validateProducts = async (
       "any.required": "stock quality is required",
     }),
 
-    categry: Joi.string().required().messages({
+    category: Joi.string().required().messages({
       "string.empty": "category cannot be empty",
       "any.required": "stock quality is required",
       "string.base": "invalid type,please provide a valid string",
