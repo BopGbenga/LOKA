@@ -8,6 +8,7 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import oauthRoutes from "./services/outhRouter";
+import productRouter from "./routes/productRoute";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use(passport.session());
 
 app.use(oauthRoutes);
 app.use("/users", userRouter);
+app.use("/products", productRouter);
 
 app.get("/api/data", (req: Request, res: Response) => {
   res.json({ message: "CORS is working with TypeScript!" });

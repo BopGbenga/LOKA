@@ -86,10 +86,16 @@ const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getProductById = getProductById;
 // create product
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { name, description, price, stockQuantity, categoryId, images, availability, } = req.body;
         const productRepository = ormConfig_1.AppDataSource.getRepository(products_1.products);
         const categoryRepository = ormConfig_1.AppDataSource.getRepository(category_1.Category);
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            res.status(401).json({ messsage: "user not authenticated" });
+            return;
+        }
         const category = yield categoryRepository.findOne({
             where: { id: categoryId },
         });
@@ -120,11 +126,13 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createProduct = createProduct;
 //update product
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const prooductId = Number(req.params.id);
         const productRepository = ormConfig_1.AppDataSource.getRepository(products_1.products);
         const product = yield productRepository.findOne({
-            where: { id: prooductId },
+            where: { user: { id: userId }, id: prooductId },
         });
         if (!product) {
             res.status(404).json({
@@ -163,14 +171,13 @@ exports.updateProduct = updateProduct;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Assumes `req.user` is populated via middleware
-        const productId = Number(req.params.id); // Extract product ID from route params
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const productId = Number(req.params.id);
         const productRepository = ormConfig_1.AppDataSource.getRepository(products_1.products);
         if (!userId) {
             res.status(401).json({ message: "Unauthorized" });
-            return; // Stop further execution
+            return;
         }
-        // Find product by user ID and product ID
         const product = yield productRepository.findOne({
             where: { user: { id: userId }, id: productId },
         });

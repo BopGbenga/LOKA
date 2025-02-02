@@ -7,6 +7,16 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/productsController";
-import { bearTokenAuth } from "../middlewares/auth";
+import { bearTokenAuth, isAdmin } from "../middlewares/auth";
+import { validateProducts } from "../middlewares/productsMiddleware";
 
 const router = Router();
+
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
+router.get("/", bearTokenAuth, getAllProducts);
+router.post("/", bearTokenAuth, isAdmin, validateProducts, createProduct);
+router.put("/", bearTokenAuth, isAdmin, validateProducts, updateProduct);
+router.delete("/", bearTokenAuth, isAdmin, deleteProduct);
+
+export default router;

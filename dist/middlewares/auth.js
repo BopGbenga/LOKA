@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bearTokenAuth = void 0;
+exports.isAdmin = exports.bearTokenAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const users_1 = require("../entities/users");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -46,3 +46,15 @@ const bearTokenAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.bearTokenAuth = bearTokenAuth;
+//Admin check middleware
+const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user && req.user.isAdmin) {
+        next();
+    }
+    else {
+        res.status(403).json({
+            message: "Access denied, admins only",
+        });
+    }
+});
+exports.isAdmin = isAdmin;

@@ -98,7 +98,7 @@ export const getProductById: RequestHandler = async (
 
 // create product
 export const createProduct: RequestHandler = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -111,8 +111,17 @@ export const createProduct: RequestHandler = async (
       images,
       availability,
     } = req.body as CreateProductDto;
+
     const productRepository = AppDataSource.getRepository(products);
+
     const categoryRepository = AppDataSource.getRepository(Category);
+
+    const userId = req.user?.id as number;
+    if (!userId) {
+      res.status(401).json({ messsage: "user not authenticated" });
+      return;
+    }
+
     const category = await categoryRepository.findOne({
       where: { id: categoryId },
     });
@@ -143,14 +152,15 @@ export const createProduct: RequestHandler = async (
 
 //update product
 export const updateProduct: RequestHandler = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
+    const userId = req.user?.id;
     const prooductId = Number(req.params.id);
     const productRepository = AppDataSource.getRepository(products);
     const product = await productRepository.findOne({
-      where: { id: prooductId },
+      where: { user: { id: userId }, id: prooductId },
     });
     if (!product) {
       res.status(404).json({
@@ -192,16 +202,15 @@ export const deleteProduct: RequestHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id; // Assumes `req.user` is populated via middleware
-    const productId = Number(req.params.id); // Extract product ID from route params
+    const userId = req.user?.id;
+    const productId = Number(req.params.id);
     const productRepository = AppDataSource.getRepository(products);
 
     if (!userId) {
       res.status(401).json({ message: "Unauthorized" });
-      return; // Stop further execution
+      return;
     }
 
-    // Find product by user ID and product ID
     const product = await productRepository.findOne({
       where: { user: { id: userId }, id: productId },
     });

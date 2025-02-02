@@ -5,13 +5,9 @@ import { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "../ormConfig";
 dotenv.config();
 
-export interface AuthRequest extends Request {
-  user?: {
-    id: number;
-    email: string;
-  };
+interface AuthRequest extends Request {
+  user?: any;
 }
-
 export const bearTokenAuth = async (
   req: AuthRequest,
   res: Response,
@@ -45,5 +41,20 @@ export const bearTokenAuth = async (
   } catch (error) {
     console.error("Authentcaion error:", error);
     res.status(500).json({ message: "internal server error" });
+  }
+};
+
+//Admin check middleware
+export const isAdmin = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({
+      message: "Access denied, admins only",
+    });
   }
 };
