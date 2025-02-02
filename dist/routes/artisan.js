@@ -11,4 +11,3 @@ router.get("/", productsController_1.getUserProducts);
 router.post("/", auth_1.bearTokenAuth, auth_1.isAdmin, productsMiddleware_1.validateProducts, productsController_1.createProduct);
 router.put("/", auth_1.bearTokenAuth, auth_1.isAdmin, productsMiddleware_1.validateProducts, productsController_1.updateProduct);
 router.delete("/", auth_1.bearTokenAuth, auth_1.isAdmin, productsController_1.deleteProduct);
-exports.default = router;

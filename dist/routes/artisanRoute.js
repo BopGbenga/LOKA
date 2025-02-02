@@ -5,7 +5,7 @@ const productsController_1 = require("../controllers/productsController");
 const auth_1 = require("../middlewares/auth");
 const productsMiddleware_1 = require("../middlewares/productsMiddleware");
 const router = (0, express_1.Router)();
-router.get("/", productsController_1.getAllProducts);
+router.get("/", auth_1.bearTokenAuth, productsController_1.getAllProducts);
 router.get("/:id", productsController_1.getProductById);
 router.get("/", productsController_1.getUserProducts);
 router.post("/", auth_1.bearTokenAuth, auth_1.isAdmin, productsMiddleware_1.validateProducts, productsController_1.createProduct);
