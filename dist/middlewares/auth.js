@@ -48,7 +48,8 @@ const bearTokenAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.bearTokenAuth = bearTokenAuth;
 //Admin check middleware
 const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.user && req.user.isAdmin) {
+    var _a;
+    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "artisan") {
         next();
     }
     else {

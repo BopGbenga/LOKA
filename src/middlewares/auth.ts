@@ -50,7 +50,7 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  if (req.user && req.user.isAdmin) {
+  if (req.user?.role === "artisan") {
     next();
   } else {
     res.status(403).json({
