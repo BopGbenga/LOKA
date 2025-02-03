@@ -42,7 +42,7 @@ app.use(outhRouter_1.default);
 app.use("/users", userRoute_1.default);
 app.use("/buyers", buyersRoute_1.default);
 app.use("/artisans", artisanRoute_1.default);
-app.use("category", categoryRoute_1.default);
+app.use("/category", categoryRoute_1.default);
 app.get("/api/data", (req, res) => {
     res.json({ message: "CORS is working with TypeScript!" });
 });

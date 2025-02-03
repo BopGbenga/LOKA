@@ -48,7 +48,7 @@ app.use(oauthRoutes);
 app.use("/users", userRouter);
 app.use("/buyers", buyersRouter);
 app.use("/artisans", artisanRouter);
-app.use("category", categoryRouter);
+app.use("/category", categoryRouter);
 
 app.get("/api/data", (req: Request, res: Response) => {
   res.json({ message: "CORS is working with TypeScript!" });
