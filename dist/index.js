@@ -13,6 +13,7 @@ const passport_1 = __importDefault(require("passport"));
 const outhRouter_1 = __importDefault(require("./services/outhRouter"));
 const buyersRoute_1 = __importDefault(require("./routes/buyersRoute"));
 const artisanRoute_1 = __importDefault(require("./routes/artisanRoute"));
+const categoryRoute_1 = __importDefault(require("./routes/categoryRoute"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // app.use(bodyParser.json());
@@ -41,6 +42,7 @@ app.use(outhRouter_1.default);
 app.use("/users", userRoute_1.default);
 app.use("/buyers", buyersRoute_1.default);
 app.use("/artisans", artisanRoute_1.default);
+app.use("category", categoryRoute_1.default);
 app.get("/api/data", (req, res) => {
     res.json({ message: "CORS is working with TypeScript!" });
 });
