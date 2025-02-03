@@ -23,7 +23,7 @@ export class products {
   description!: string;
 
   @Column("decimal")
-  price!: number;
+  price!: string;
 
   @Column()
   stockQuantity!: number;

@@ -25,7 +25,7 @@ const validateProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             "any.required": "description is required",
             "string.base": "invalid type,please provide a valid string",
         }),
-        price: joi_1.default.number().required().messages({
+        price: joi_1.default.string().required().messages({
             "string.empty": "price cannot be empty",
             "any.required": "price is required",
             "number.base": "invalid type,please provide a valid number",

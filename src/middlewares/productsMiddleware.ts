@@ -16,7 +16,7 @@ export const validateProducts = async (
       "any.required": "description is required",
       "string.base": "invalid type,please provide a valid string",
     }),
-    price: Joi.number().required().messages({
+    price: Joi.string().required().messages({
       "string.empty": "price cannot be empty",
       "any.required": "price is required",
       "number.base": "invalid type,please provide a valid number",
