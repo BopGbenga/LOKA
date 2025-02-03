@@ -1,1 +1,72 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createOrder = void 0;
+const ormConfig_1 = require("../ormConfig");
+const order_1 = require("../entities/order");
+const orderItems_1 = require("../entities/orderItems");
+const users_1 = require("../entities/users");
+const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user.id;
+    const { products } = req.body;
+    try {
+        // Fetch the user from the database
+        const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
+        const user = yield userRepository.findOne({ where: { id: userId } });
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        // Create order
+        const orderRepository = ormConfig_1.AppDataSource.getRepository(order_1.Order);
+        const order = new order_1.Order();
+        order.user = user;
+        order.status = "pending"; // Default status
+        order.totalPrice = 0; // Initialize total price
+        // Create order items
+        const orderItems = [];
+        for (let item of products) {
+            const productRepository = ormConfig_1.AppDataSource.getRepository(products);
+            const product = yield productRepository.findOne({
+                where: { id: item.productId },
+            });
+            if (!product) {
+                res
+                    .status(404)
+                    .json({ message: `Product with ID ${item.productId} not found` });
+                return;
+            }
+            const orderItem = new orderItems_1.OrderItem();
+            orderItem.product = products;
+            orderItem.quantity = item.quantity;
+            orderItem.price = product.price * item.quantity;
+            // Add orderItem to the array
+            orderItems.push(orderItem);
+            // Update the product's stock (assuming a stock field exists)
+            product.stock -= item.quantity;
+            yield productRepository.save(product);
+        }
+        // Calculate the total price
+        order.totalPrice = orderItems.reduce((total, item) => total + item.price, 0);
+        yield orderRepository.save(order);
+        // Save the order items
+        for (let orderItem of orderItems) {
+            orderItem.order = order;
+            yield ormConfig_1.AppDataSource.getRepository(orderItems_1.OrderItem).save(orderItem);
+        }
+        res.status(201).json(order); // Return the created order
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.createOrder = createOrder;
