@@ -2,7 +2,7 @@ import { Category } from "../entities/category";
 import { AppDataSource } from "../ormConfig";
 import { Request, Response } from "express";
 
-export const crateCategory = async (
+export const createCategory = async (
   req: Request,
   res: Response
 ): Promise<void> => {

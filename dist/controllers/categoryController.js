@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.crateCategory = void 0;
+exports.createCategory = void 0;
 const category_1 = require("../entities/category");
 const ormConfig_1 = require("../ormConfig");
-const crateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, description, products } = req.body;
         const categoryRepository = ormConfig_1.AppDataSource.getRepository(category_1.Category);
@@ -40,4 +40,4 @@ const crateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Internal server error." });
     }
 });
-exports.crateCategory = crateCategory;
+exports.createCategory = createCategory;
