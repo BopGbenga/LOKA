@@ -37,7 +37,7 @@ const bearTokenAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             res.status(401).json({ message: "user not found" });
             return;
         }
-        req.user = { id: user.id, email: user.email };
+        req.user = { id: user.id, email: user.email, role: user.role };
         next();
     }
     catch (error) {
