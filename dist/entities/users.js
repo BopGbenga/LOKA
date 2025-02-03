@@ -27,6 +27,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const artisans_1 = require("./artisans");
 const category_1 = require("./category");
 const products_1 = require("./products");
+const order_1 = require("./order");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -70,6 +71,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 100, unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => order_1.Order, (order) => order.user),
+    __metadata("design:type", Array)
+], User.prototype, "orders", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
     ,

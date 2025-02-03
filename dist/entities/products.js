@@ -13,6 +13,7 @@ exports.products = void 0;
 const typeorm_1 = require("typeorm");
 const category_1 = require("./category");
 const users_1 = require("./users");
+const orderItems_1 = require("./orderItems");
 let products = class products {
 };
 exports.products = products;
@@ -40,6 +41,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], products.prototype, "images", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => orderItems_1.OrderItem, (orderItem) => orderItem.product),
+    __metadata("design:type", Array)
+], products.prototype, "orderItems", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => category_1.Category, (category) => category.products, { eager: true }),
     __metadata("design:type", category_1.Category)

@@ -14,6 +14,7 @@ import bcrypt from "bcrypt";
 import { ArtisanProfile } from "./artisans";
 import { Category } from "./category";
 import { products } from "./products";
+import { Order } from "./order";
 
 @Entity("users")
 export class User {
@@ -31,6 +32,9 @@ export class User {
 
   @Column({ type: "varchar", length: 100, unique: true })
   email!: string;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
 
   @Column({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
   password!: string | null;

@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const productsController_1 = require("../controllers/productsController");
+const buyers_1 = require("../controllers/buyers");
 const router = (0, express_1.Router)();
 router.get("/", productsController_1.getAllProducts);
 router.get("/:id", productsController_1.getProductById);
+router.get("/", buyers_1.userInterest);
 exports.default = router;

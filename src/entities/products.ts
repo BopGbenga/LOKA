@@ -3,11 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./category";
 import { User } from "./users";
+import { OrderItem } from "./orderItems";
 
 @Entity()
 export class products {
@@ -28,6 +30,9 @@ export class products {
 
   @Column()
   images!: string;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
+  orderItems!: OrderItem[];
 
   @ManyToOne(() => Category, (category) => category.products, { eager: true })
   category!: Category;
