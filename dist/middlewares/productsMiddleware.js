@@ -39,6 +39,7 @@ const validateProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             "any.required": "stock quality is required",
             "string.base": "invalid type,please provide a valid string",
         }),
+        image: joi_1.default.string(),
     });
     try {
         yield schema.validateAsync(req.body, { abortEarly: false });

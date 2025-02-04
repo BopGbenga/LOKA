@@ -31,6 +31,7 @@ export const validateProducts = async (
       "any.required": "stock quality is required",
       "string.base": "invalid type,please provide a valid string",
     }),
+    image: Joi.string(),
   });
   try {
     await schema.validateAsync(req.body, { abortEarly: false });

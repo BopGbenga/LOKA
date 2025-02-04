@@ -28,7 +28,7 @@ export class products {
   @Column()
   stockQuantity!: number;
 
-  @Column()
+  @Column({ type: "text", nullable: false, default: "default-image-url.jpg" })
   images!: string;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
