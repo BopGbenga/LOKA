@@ -23,9 +23,9 @@ app.set("trust proxy", 1);
 app.use((0, cors_1.default)({
     origin: [
         "https://loka-1.onrender.com",
-        "http://localhost:5173",
+        // "http://localhost:5173",
         // "https://lokatest.vercel.app",
-        "https://lokatest.vercel.app/"
+        "https://lokatest.vercel.app/",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
