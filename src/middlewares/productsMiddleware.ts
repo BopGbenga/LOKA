@@ -32,6 +32,11 @@ export const validateProducts = async (
       "string.base": "invalid type,please provide a valid string",
     }),
     image: Joi.string(),
+    availability: Joi.string().required().messages({
+      "string.empty": "field cannot be empty",
+      "any.required": "availability is required",
+      "string.base": "invalid type, please provide a valid string",
+    }),
   });
   try {
     await schema.validateAsync(req.body, { abortEarly: false });

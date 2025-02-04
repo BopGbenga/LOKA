@@ -40,6 +40,11 @@ const validateProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             "string.base": "invalid type,please provide a valid string",
         }),
         image: joi_1.default.string(),
+        availability: joi_1.default.string().required().messages({
+            "string.empty": "field cannot be empty",
+            "any.required": "availability is required",
+            "string.base": "invalid type, please provide a valid string",
+        }),
     });
     try {
         yield schema.validateAsync(req.body, { abortEarly: false });
