@@ -25,6 +25,7 @@ app.use((0, cors_1.default)({
         "https://loka-1.onrender.com",
         "http://localhost:5173",
         // "https://lokatest.vercel.app",
+        "https://lokatest.vercel.app/"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
@@ -42,7 +43,7 @@ app.use(outhRouter_1.default);
 app.use("/users", userRoute_1.default);
 app.use("/buyers", buyersRoute_1.default);
 app.use("/artisans", artisanRoute_1.default);
-app.use("/category", categoryRoute_1.default);
+app.use("category", categoryRoute_1.default);
 app.get("/api/data", (req, res) => {
     res.json({ message: "CORS is working with TypeScript!" });
 });

@@ -123,7 +123,7 @@ const verifyEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         user.isVerified = true;
         yield userRepository.save(user);
         const newToken = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.redirect(`http://localhost:5173/VerifyEmail?token=${newToken}`);
+        res.redirect(`https://lokatest.vercel.app//VerifyEmail?token=${newToken}`);
         // res.status(200).json({ message: "Email verified successfully" });
     }
     catch (error) {
