@@ -17,44 +17,30 @@ const ormConfig_1 = require("../ormConfig");
 const selectRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId, role } = req.body;
-        // Check if role is provided
-        if (!role) {
-            res.status(400).json({
-                message: "Please select a role",
-            });
-            return;
+        // ✅ Ensure role is provided and valid
+        const validRoles = ["buyer", "artisan"];
+        if (!role || !validRoles.includes(role)) {
+            res
+                .status(403)
+                .json({ message: "Please select a valid role before proceeding" });
+            return; // ✅ Stops execution
         }
-        // Fetch user from the database
+        // ✅ Fetch user from the database
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         const user = yield userRepository.findOne({ where: { id: userId } });
-        // Check if user exists
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
         }
-        // Update the role of the user
+        // ✅ Update role and save user
         user.role = role;
         yield userRepository.save(user);
-        // Return success response
-        if (role === "buyer") {
-            res
-                .status(200)
-                .json({ message: "Role selected, redirecting to buyer dashboard" });
-        }
-        else if (role === "artisan") {
-            res.status(200).json({
-                message: "Role selected, redirecting to artisan details page",
-            });
-            // } else {
-            //   res.status(403).json({
-            //     message: "please select a role before proceeding",
-            //   });
-        }
-        if (!role || role === null) {
-            res.status(403).json({
-                message: "please select a role before proceeding",
-            });
-        }
+        // ✅ Return success response
+        res.status(200).json({
+            message: role === "buyer"
+                ? "Role selected, redirecting to buyer dashboard"
+                : "Role selected, redirecting to artisan details page",
+        });
     }
     catch (error) {
         console.error("Error selecting role:", error);

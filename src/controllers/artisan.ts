@@ -12,48 +12,35 @@ export const selectRole = async (
   try {
     const { userId, role } = req.body;
 
-    // Check if role is provided
-    if (!role) {
-      res.status(400).json({
-        message: "Please select a role",
-      });
-      return;
+    // ✅ Ensure role is provided and valid
+    const validRoles = ["buyer", "artisan"];
+    if (!role || !validRoles.includes(role)) {
+      res
+        .status(403)
+        .json({ message: "Please select a valid role before proceeding" });
+      return; // ✅ Stops execution
     }
 
-    // Fetch user from the database
+    // ✅ Fetch user from the database
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: userId } });
 
-    // Check if user exists
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
 
-    // Update the role of the user
+    // ✅ Update role and save user
     user.role = role;
     await userRepository.save(user);
 
-    // Return success response
-    if (role === "buyer") {
-      res
-        .status(200)
-        .json({ message: "Role selected, redirecting to buyer dashboard" });
-    } else if (role === "artisan") {
-      res.status(200).json({
-        message: "Role selected, redirecting to artisan details page",
-      });
-      // } else {
-      //   res.status(403).json({
-      //     message: "please select a role before proceeding",
-      //   });
-    }
-
-    if (!role || role === null) {
-      res.status(403).json({
-        message: "please select a role before proceeding",
-      });
-    }
+    // ✅ Return success response
+    res.status(200).json({
+      message:
+        role === "buyer"
+          ? "Role selected, redirecting to buyer dashboard"
+          : "Role selected, redirecting to artisan details page",
+    });
   } catch (error) {
     console.error("Error selecting role:", error);
     res.status(500).json({ message: "Internal server error" });
