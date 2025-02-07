@@ -45,6 +45,15 @@ const selectRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(200).json({
                 message: "Role selected, redirecting to artisan details page",
             });
+            // } else {
+            //   res.status(403).json({
+            //     message: "please select a role before proceeding",
+            //   });
+        }
+        if (!role) {
+            res.status(403).json({
+                message: "please select a role before proceeding",
+            });
         }
     }
     catch (error) {

@@ -43,6 +43,16 @@ export const selectRole = async (
       res.status(200).json({
         message: "Role selected, redirecting to artisan details page",
       });
+      // } else {
+      //   res.status(403).json({
+      //     message: "please select a role before proceeding",
+      //   });
+    }
+
+    if (!role) {
+      res.status(403).json({
+        message: "please select a role before proceeding",
+      });
     }
   } catch (error) {
     console.error("Error selecting role:", error);
@@ -108,7 +118,3 @@ export const artisandetails = async (
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-
