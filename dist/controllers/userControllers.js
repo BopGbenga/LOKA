@@ -166,10 +166,10 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }, process.env.JWT_SECRET, { expiresIn: "2d" });
         let redirectUrl = "";
         if (user.role === "buyer") {
-            redirectUrl = "/dashboard/buyer";
+            redirectUrl = " /BuyersDash";
         }
         else if (user.role === "artisan") {
-            redirectUrl = "/dashboard/artisan";
+            redirectUrl = "/ArtisanDash";
         }
         res.status(200).json({
             message: "login successful",

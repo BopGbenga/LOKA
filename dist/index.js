@@ -59,8 +59,8 @@ app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(outhRouter_1.default);
 app.use("/users", userRoute_1.default);
-app.use("/buyers", buyersRoute_1.default);
-app.use("/artisans", artisanRoute_1.default);
+app.use("/dashboard", buyersRoute_1.default);
+app.use("/dashboard", artisanRoute_1.default);
 app.use("category", categoryRoute_1.default);
 app.use("/order", orderRoute_1.default);
 app.get("/api/data", (req, res) => {

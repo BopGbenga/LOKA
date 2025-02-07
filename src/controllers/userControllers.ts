@@ -206,9 +206,9 @@ export const loginUser: RequestHandler = async (
 
     let redirectUrl = "";
     if (user.role === "buyer") {
-      redirectUrl = "/dashboard/buyer";
+      redirectUrl = " /BuyersDash";
     } else if (user.role === "artisan") {
-      redirectUrl = "/dashboard/artisan";
+      redirectUrl = "/ArtisanDash";
     }
     res.status(200).json({
       message: "login successful",

@@ -68,8 +68,8 @@ app.use(passport.session());
 
 app.use(oauthRoutes);
 app.use("/users", userRouter);
-app.use("/buyers", buyersRouter);
-app.use("/artisans", artisanRouter);
+app.use("/dashboard", buyersRouter);
+app.use("/dashboard", artisanRouter);
 app.use("category", categoryRouter);
 app.use("/order", orderRouter);
 
