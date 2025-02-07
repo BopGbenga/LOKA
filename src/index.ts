@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 
-app.use(cors({ origin: "https://lokatest.vercel.app", credentials: true }));
+// app.use(cors({ origin: "https://lokatest.vercel.app", credentials: true }));
 app.use(
   cors({
     origin: [
