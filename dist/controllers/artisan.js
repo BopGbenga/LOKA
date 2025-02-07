@@ -50,7 +50,7 @@ const selectRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             //     message: "please select a role before proceeding",
             //   });
         }
-        if (!role) {
+        if (!role || role === null) {
             res.status(403).json({
                 message: "please select a role before proceeding",
             });

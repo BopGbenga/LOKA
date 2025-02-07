@@ -49,7 +49,7 @@ export const selectRole = async (
       //   });
     }
 
-    if (!role) {
+    if (!role || role === null) {
       res.status(403).json({
         message: "please select a role before proceeding",
       });
