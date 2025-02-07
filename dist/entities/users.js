@@ -28,6 +28,8 @@ const artisans_1 = require("./artisans");
 const category_1 = require("./category");
 const products_1 = require("./products");
 const order_1 = require("./order");
+const notifications_1 = require("./notifications");
+const entity_1 = require("./entity");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -76,8 +78,7 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "orders", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
-    ,
+    (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true }),
     __metadata("design:type", Object)
 ], User.prototype, "password", void 0);
 __decorate([
@@ -96,6 +97,16 @@ __decorate([
     (0, typeorm_1.Column)({ type: "timestamp", nullable: true }),
     __metadata("design:type", Object)
 ], User.prototype, "tokenExpiry", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => entity_1.review, (review) => review.user),
+    __metadata("design:type", Array)
+], User.prototype, "reviews", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => notifications_1.Notification, (notification) => notification.user, {
+        cascade: true,
+    }),
+    __metadata("design:type", Array)
+], User.prototype, "notifications", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => artisans_1.ArtisanProfile, (artisanProfile) => artisanProfile.user, {
         nullable: true,

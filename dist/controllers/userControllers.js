@@ -162,11 +162,20 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({
             id: user.id,
             email: user.email,
+            role: user.role,
         }, process.env.JWT_SECRET, { expiresIn: "2d" });
+        let redirectUrl = "";
+        if (user.role === "buyer") {
+            redirectUrl = "/dashboard/buyer";
+        }
+        else if (user.role === "artisan") {
+            redirectUrl = "/dashboard/artisan";
+        }
         res.status(200).json({
             message: "login successful",
             success: true,
             token,
+            redirectUrl,
         });
         return;
     }

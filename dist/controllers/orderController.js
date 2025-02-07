@@ -14,24 +14,24 @@ const ormConfig_1 = require("../ormConfig");
 const order_1 = require("../entities/order");
 const orderItems_1 = require("../entities/orderItems");
 const users_1 = require("../entities/users");
+const notifications_1 = require("../entities/notifications");
+const __1 = require("..");
+const notificationemail_1 = require("../utils/notificationemail");
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user.id;
     const { products } = req.body;
     try {
-        // Fetch the user from the database
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         const user = yield userRepository.findOne({ where: { id: userId } });
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
         }
-        // Create order
         const orderRepository = ormConfig_1.AppDataSource.getRepository(order_1.Order);
         const order = new order_1.Order();
         order.user = user;
-        order.status = "pending"; // Default status
-        order.totalPrice = 0; // Initialize total price
-        // Create order items
+        order.status = "pending";
+        order.totalPrice = 0;
         const orderItems = [];
         for (let item of products) {
             const productRepository = ormConfig_1.AppDataSource.getRepository(products);
@@ -48,21 +48,30 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             orderItem.product = products;
             orderItem.quantity = item.quantity;
             orderItem.price = product.price * item.quantity;
-            // Add orderItem to the array
             orderItems.push(orderItem);
-            // Update the product's stock (assuming a stock field exists)
             product.stock -= item.quantity;
             yield productRepository.save(product);
         }
-        // Calculate the total price
         order.totalPrice = orderItems.reduce((total, item) => total + item.price, 0);
         yield orderRepository.save(order);
-        // Save the order items
         for (let orderItem of orderItems) {
             orderItem.order = order;
             yield ormConfig_1.AppDataSource.getRepository(orderItems_1.OrderItem).save(orderItem);
         }
-        res.status(201).json(order); // Return the created order
+        // 🔹 Save notification in database
+        const notificationRepository = ormConfig_1.AppDataSource.getRepository(notifications_1.Notification);
+        const notification = new notifications_1.Notification();
+        notification.user = user;
+        notification.message = `Your order #${order.id} has been placed successfully.`;
+        yield notificationRepository.save(notification);
+        // 🔹 Send Email Notification
+        yield (0, notificationemail_1.sendOrderConfirmationEmail)(user.email, order);
+        // 🔹 Emit WebSocket Event
+        __1.io.emit(`notification-${user.id}`, {
+            message: notification.message,
+            orderId: order.id,
+        });
+        res.status(201).json(order);
     }
     catch (error) {
         console.error(error);

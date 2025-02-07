@@ -15,6 +15,8 @@ import { ArtisanProfile } from "./artisans";
 import { Category } from "./category";
 import { products } from "./products";
 import { Order } from "./order";
+import { Notification } from "./notifications";
+import { review } from "./entity";
 
 @Entity("users")
 export class User {
@@ -36,7 +38,7 @@ export class User {
   @OneToMany(() => Order, (order) => order.user)
   orders!: Order[];
 
-  @Column({ type: "varchar", length: 255, nullable: true }) // Nullable for Google users
+  @Column({ type: "varchar", length: 255, nullable: true })
   password!: string | null;
 
   @Column({ type: "boolean", default: false })
@@ -50,6 +52,14 @@ export class User {
 
   @Column({ type: "timestamp", nullable: true })
   tokenExpiry!: Date | null;
+
+  @OneToMany(() => review, (review) => review.user)
+  reviews!: review[];
+
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
+  notifications!: Notification[];
 
   @OneToOne(() => ArtisanProfile, (artisanProfile) => artisanProfile.user, {
     nullable: true,

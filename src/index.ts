@@ -11,15 +11,21 @@ import oauthRoutes from "./services/outhRouter";
 import buyersRouter from "./routes/buyersRoute";
 import artisanRouter from "./routes/artisanRoute";
 import categoryRouter from "./routes/categoryRoute";
+import orderRouter from "./routes/orderRoute";
+import http from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 
 const app = express();
+
+const server = http.createServer(app);
 // app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 
+app.use(cors({ origin: "https://lokatest.vercel.app", credentials: true }));
 app.use(
   cors({
     origin: [
@@ -31,6 +37,22 @@ app.use(
     credentials: true,
   })
 );
+
+export const io = new Server(server, {
+  cors: {
+    origin: ["https://lokatest.vercel.app"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("user connected", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
 
 const port = process.env.PORT || 4000;
 app.use(
@@ -49,6 +71,7 @@ app.use("/users", userRouter);
 app.use("/buyers", buyersRouter);
 app.use("/artisans", artisanRouter);
 app.use("category", categoryRouter);
+app.use("/order", orderRouter);
 
 app.get("/api/data", (req: Request, res: Response) => {
   res.json({ message: "CORS is working with TypeScript!" });

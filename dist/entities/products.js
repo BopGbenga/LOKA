@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 const category_1 = require("./category");
 const users_1 = require("./users");
 const orderItems_1 = require("./orderItems");
+const entity_1 = require("./entity");
 let products = class products {
 };
 exports.products = products;
@@ -41,6 +42,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: "text", nullable: false, default: "default-image-url.jpg" }),
     __metadata("design:type", String)
 ], products.prototype, "images", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => entity_1.review, (review) => review.products),
+    __metadata("design:type", Array)
+], products.prototype, "reviews", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => orderItems_1.OrderItem, (orderItem) => orderItem.product),
     __metadata("design:type", Array)

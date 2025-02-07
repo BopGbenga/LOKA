@@ -198,14 +198,23 @@ export const loginUser: RequestHandler = async (
       {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "2d" }
     );
+
+    let redirectUrl = "";
+    if (user.role === "buyer") {
+      redirectUrl = "/dashboard/buyer";
+    } else if (user.role === "artisan") {
+      redirectUrl = "/dashboard/artisan";
+    }
     res.status(200).json({
       message: "login successful",
       success: true,
       token,
+      redirectUrl,
     });
     return;
   } catch (error) {

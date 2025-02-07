@@ -10,6 +10,7 @@ import {
 import { Category } from "./category";
 import { User } from "./users";
 import { OrderItem } from "./orderItems";
+import { review } from "./entity";
 
 @Entity()
 export class products {
@@ -30,6 +31,9 @@ export class products {
 
   @Column({ type: "text", nullable: false, default: "default-image-url.jpg" })
   images!: string;
+
+  @OneToMany(() => review, (review) => review.products)
+  reviews!: review[];
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems!: OrderItem[];
