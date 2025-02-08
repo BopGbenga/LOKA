@@ -16,6 +16,7 @@ const ormConfig_1 = require("../ormConfig");
 //Role selection
 const selectRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("Request Body:", req.body);
         const { userId, role } = req.body;
         // ✅ Ensure role is provided and valid
         const validRoles = ["buyer", "artisan"];

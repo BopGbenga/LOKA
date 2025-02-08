@@ -10,6 +10,8 @@ export const selectRole = async (
   res: Response
 ): Promise<void> => {
   try {
+    console.log("Request Body:", req.body);
+
     const { userId, role } = req.body;
 
     // ✅ Ensure role is provided and valid
