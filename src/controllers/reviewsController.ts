@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../ormConfig";
-import { review } from "../entities/entity";
+import { review } from "../entities/review";
 import { User } from "../entities/users";
 import { products } from "../entities/products";
 import { Order } from "../entities/order";
@@ -32,5 +32,23 @@ export const submtReview = async (
     if (!order) {
       res.status(403).json({ message: "you can only review ordered product" });
     }
-  } catch (error) {}
+
+    const reviewRepository = AppDataSource.getRepository(review);
+    const productRepository = AppDataSource.getRepository(products);
+
+    const reviews = reviewRepository.create({
+      user: { id: userId },
+      products: { id: productId },
+      rating,
+      comment,
+    });
+
+    await reviewRepository.save(reviews);
+    res.status(201).json({
+      message: "Review submitted successfully",
+      reviews,
+    });
+  } catch (error) {
+    console.error;
+  }
 };

@@ -10,7 +10,7 @@ export const selectRole = async (
   res: Response
 ): Promise<void> => {
   try {
-    console.log("Request Body:", req.body);
+    console.log("Request body:", req.body);
 
     const { userId, role } = req.body;
 

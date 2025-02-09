@@ -29,7 +29,7 @@ const category_1 = require("./category");
 const products_1 = require("./products");
 const order_1 = require("./order");
 const notifications_1 = require("./notifications");
-const entity_1 = require("./entity");
+const review_1 = require("./review");
 let User = class User {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -98,7 +98,7 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "tokenExpiry", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => entity_1.review, (review) => review.user),
+    (0, typeorm_1.OneToMany)(() => review_1.review, (review) => review.user),
     __metadata("design:type", Array)
 ], User.prototype, "reviews", void 0);
 __decorate([

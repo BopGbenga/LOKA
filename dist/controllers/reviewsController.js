@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.submtReview = void 0;
 const ormConfig_1 = require("../ormConfig");
+const review_1 = require("../entities/review");
+const products_1 = require("../entities/products");
 const order_1 = require("../entities/order");
 //submit a review
 const submtReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,7 +31,22 @@ const submtReview = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         if (!order) {
             res.status(403).json({ message: "you can only review ordered product" });
         }
+        const reviewRepository = ormConfig_1.AppDataSource.getRepository(review_1.review);
+        const productRepository = ormConfig_1.AppDataSource.getRepository(products_1.products);
+        const reviews = reviewRepository.create({
+            user: { id: userId },
+            products: { id: productId },
+            rating,
+            comment,
+        });
+        yield reviewRepository.save(reviews);
+        res.status(201).json({
+            message: "Review submitted successfully",
+            reviews,
+        });
     }
-    catch (error) { }
+    catch (error) {
+        console.error;
+    }
 });
 exports.submtReview = submtReview;

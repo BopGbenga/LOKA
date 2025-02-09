@@ -16,7 +16,7 @@ import { Category } from "./category";
 import { products } from "./products";
 import { Order } from "./order";
 import { Notification } from "./notifications";
-import { review } from "./entity";
+import { review } from "./review";
 
 @Entity("users")
 export class User {

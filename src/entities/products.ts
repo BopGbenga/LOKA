@@ -10,7 +10,7 @@ import {
 import { Category } from "./category";
 import { User } from "./users";
 import { OrderItem } from "./orderItems";
-import { review } from "./entity";
+import { review } from "./review";
 
 @Entity()
 export class products {
