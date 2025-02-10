@@ -75,6 +75,7 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             const nameParts = name.split(" ");
             const firstname = nameParts[0];
             const lastname = nameParts.slice(1).join(" ");
+            const someCondition = true;
             const user = new users_1.User();
             user.googleId = googleId;
             user.firstname = firstname;
@@ -82,7 +83,7 @@ router.get("/auth/google/callback", passport_1.default.authenticate("google", { 
             user.email = email;
             user.isVerified = true;
             user.username = lastname;
-            user.role = null; // Default role
+            user.role = someCondition ? "artisan" : "buyer";
             yield userRepository.save(user);
             console.log("New user created:", user);
             req.login(user, (err) => {
