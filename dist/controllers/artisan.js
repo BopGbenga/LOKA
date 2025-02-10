@@ -16,27 +16,23 @@ const ormConfig_1 = require("../ormConfig");
 //Role selection
 const selectRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Request body:", req.body);
+        console.log("Incoming Request Body:", req.body);
+        console.log("Headers:", req.headers);
+        console.log("Request Method:", req.method);
+        console.log("Request URL:", req.url);
         const { userId, role } = req.body;
-        // ✅ Ensure role is provided and valid
-        const validRoles = ["buyer", "artisan"];
-        if (!role || !validRoles.includes(role)) {
-            res
-                .status(403)
-                .json({ message: "Please select a valid role before proceeding" });
-            return; // ✅ Stops execution
+        if (!role) {
+            res.status(400).json({ message: "Please select a role" });
+            return;
         }
-        // ✅ Fetch user from the database
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         const user = yield userRepository.findOne({ where: { id: userId } });
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
         }
-        // ✅ Update role and save user
         user.role = role;
         yield userRepository.save(user);
-        // ✅ Return success response
         res.status(200).json({
             message: role === "buyer"
                 ? "Role selected, redirecting to buyer dashboard"

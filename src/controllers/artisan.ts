@@ -10,44 +10,35 @@ export const selectRole = async (
   res: Response
 ): Promise<void> => {
   try {
+    console.log("Incoming Request Body:", req.body);
+    console.log("Headers:", req.headers);
+    console.log("Request Method:", req.method);
+    console.log("Request URL:", req.url);
+
     const { userId, role } = req.body;
 
-    // Check if role is provided
     if (!role) {
-      res.status(400).json({
-        message: "Please select a role",
-      });
+      res.status(400).json({ message: "Please select a role" });
       return;
     }
 
-    // Fetch user from the database
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: userId } });
 
-    // Check if user exists
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
 
-    // Update the role of the user
     user.role = role;
     await userRepository.save(user);
 
-    // Return success response
-    if (role === "buyer") {
-      res
-        .status(200)
-        .json({ message: "Role selected, redirecting to buyer dashboard" });
-    } else if (role === "artisan") {
-      res.status(200).json({
-        message: "Role selected, redirecting to artisan details page",
-      });
-    } else {
-      res.status(403).json({
-        message: "please select a role before proceeding",
-      });
-    }
+    res.status(200).json({
+      message:
+        role === "buyer"
+          ? "Role selected, redirecting to buyer dashboard"
+          : "Role selected, redirecting to artisan details page",
+    });
   } catch (error) {
     console.error("Error selecting role:", error);
     res.status(500).json({ message: "Internal server error" });
