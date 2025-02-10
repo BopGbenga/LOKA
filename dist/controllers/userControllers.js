@@ -31,7 +31,11 @@ const transporter = nodemailer_1.default.createTransport({
 //create a new user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { firstname, lastname, username, email, password } = req.body;
+        const { firstname, lastname, username, email, password, role } = req.body;
+        if (role !== "buyer" && role !== "artisan") {
+            res.status(400).json({ message: 'Role must be "buyer" or "artisan"' });
+            return;
+        }
         const userRepository = ormConfig_1.AppDataSource.getRepository(users_1.User);
         //check if uername exist
         const existingUsername = yield userRepository.findOne({
@@ -63,7 +67,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             username,
             email,
             password,
-            role: null,
+            role,
             isVerified: false,
         });
         const savedUser = yield userRepository.save(newUser);
@@ -166,7 +170,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }, process.env.JWT_SECRET, { expiresIn: "2d" });
         let redirectUrl = "";
         if (user.role === "buyer") {
-            redirectUrl = " /BuyersDash";
+            redirectUrl = "/BuyersDash";
         }
         else if (user.role === "artisan") {
             redirectUrl = "/ArtisanDash";

@@ -45,7 +45,7 @@ export class User {
   isVerified!: boolean;
 
   @Column({ type: "enum", enum: ["buyer", "artisan"], nullable: true })
-  role!: "buyer" | "artisan" | null;
+  role!: "buyer" | "artisan" 
 
   @Column({ type: "varchar", nullable: true })
   resetToken!: string | null;

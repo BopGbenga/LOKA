@@ -32,8 +32,12 @@ export const createUser: RequestHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { firstname, lastname, username, email, password } =
+    const { firstname, lastname, username, email, password, role } =
       req.body as CreateUserDTO;
+    if (role !== "buyer" && role !== "artisan") {
+      res.status(400).json({ message: 'Role must be "buyer" or "artisan"' });
+      return;
+    }
     const userRepository = AppDataSource.getRepository(User);
 
     //check if uername exist
@@ -67,7 +71,7 @@ export const createUser: RequestHandler = async (
       username,
       email,
       password,
-      role: null,
+      role,
       isVerified: false,
     });
     const savedUser = await userRepository.save(newUser);
@@ -206,7 +210,7 @@ export const loginUser: RequestHandler = async (
 
     let redirectUrl = "";
     if (user.role === "buyer") {
-      redirectUrl = " /BuyersDash";
+      redirectUrl = "/BuyersDash";
     } else if (user.role === "artisan") {
       redirectUrl = "/ArtisanDash";
     }
