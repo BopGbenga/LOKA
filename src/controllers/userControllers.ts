@@ -34,10 +34,7 @@ export const createUser: RequestHandler = async (
   try {
     const { firstname, lastname, username, email, password, role } =
       req.body as CreateUserDTO;
-    if (role !== "buyer" && role !== "artisan") {
-      res.status(400).json({ message: 'Role must be "buyer" or "artisan"' });
-      return;
-    }
+
     const userRepository = AppDataSource.getRepository(User);
 
     //check if uername exist
@@ -71,7 +68,7 @@ export const createUser: RequestHandler = async (
       username,
       email,
       password,
-      role,
+      role :null,
       isVerified: false,
     });
     const savedUser = await userRepository.save(newUser);

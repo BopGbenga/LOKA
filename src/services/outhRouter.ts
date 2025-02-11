@@ -75,7 +75,6 @@ router.get(
         const firstname = nameParts[0];
         const lastname = nameParts.slice(1).join(" ");
 
-        const someCondition = true;
         const user = new User();
         user.googleId = googleId;
         user.firstname = firstname;
@@ -83,7 +82,7 @@ router.get(
         user.email = email;
         user.isVerified = true;
         user.username = lastname;
-        user.role = someCondition ? "artisan" : "buyer";
+        user.role = null;
         await userRepository.save(user);
         console.log("New user created:", user);
 
