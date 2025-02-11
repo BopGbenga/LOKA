@@ -29,8 +29,8 @@ app.use(
   cors({
     origin: [
       "https://loka-1.onrender.com",
-      "http://localhost:5173",
-      // "https://lokatest.vercel.app",
+      // "http://localhost:5173",
+      "https://lokatest.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
