@@ -87,7 +87,7 @@ __decorate([
 ], User.prototype, "isVerified", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "enum", enum: ["buyer", "artisan"], nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], User.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", nullable: true }),
