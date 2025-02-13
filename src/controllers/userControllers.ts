@@ -68,7 +68,7 @@ export const createUser: RequestHandler = async (
       username,
       email,
       password,
-      role :null,
+      role: null,
       isVerified: false,
     });
     const savedUser = await userRepository.save(newUser);
@@ -154,7 +154,7 @@ export const verifyEmail = async (
       { expiresIn: "1h" }
     );
 
-    res.redirect(`https://lokatest.vercel.app/VerifyEmail?token=${newToken}`);
+    res.redirect(`https://lokatest.vercel.app/verify-email?token=${newToken}`);
 
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
