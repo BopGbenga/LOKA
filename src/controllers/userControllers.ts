@@ -154,7 +154,9 @@ export const verifyEmail = async (
       { expiresIn: "1h" }
     );
 
-    res.redirect(`https://lokatest.vercel.app/verify-email?token=${newToken}`);
+    res.redirect(
+      `https://https://loka-frontend.vercel.app/verify-email?token=${newToken}`
+    );
 
     // res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
