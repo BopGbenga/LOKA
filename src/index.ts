@@ -30,7 +30,8 @@ app.use(
     origin: [
       "https://loka-1.onrender.com",
       // "http://localhost:5173",
-      "https://lokatest.vercel.app",
+      // "https://lokatest.vercel.app",
+      "https://loka-frontend.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
